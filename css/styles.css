@@ -63,9 +63,11 @@ a:hover {
 }
 
 .imagen-ejemplo {
-    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
     border-radius: 6px;
-    margin: 20px 0;
+    margin: 20px auto;
     border: 1px solid #ccc;
 }
 
