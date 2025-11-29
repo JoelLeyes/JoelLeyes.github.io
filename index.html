@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio – Joel Leyes</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Joel Leyes</h1>
+        <p class="subtitulo">Tecnólogo en Tecnologías de la Información | Cloud & Backend</p>
+    </header>
+
+    <section class="proyecto">
+        <h2>Proyecto Destacado: Plataforma Cloud en AWS</h2>
+        <p class="descripcion">
+            Aplicación full-stack desarrollada con Django, PostgreSQL, Docker y Kubernetes, 
+            desplegada en AWS mediante EKS, ECR, EC2, RDS, S3 e IAM. Incluye un microservicio 
+            adicional en Flask para notificaciones y arquitectura basada en microservicios.
+        </p>
+
+        <h3>Arquitectura</h3>
+        <p>
+            El sistema está compuesto por un backend en Django, un microservicio independiente 
+            en Flask para notificaciones, y un frontend web ligero. Todos los componentes fueron 
+            dockerizados, subidos a ECR e implementados en Kubernetes (EKS), utilizando RDS como 
+            base de datos y S3 como almacenamiento.
+        </p>
+
+        <img src="img/arquitectura.png" alt="Diagrama de arquitectura" class="imagen-ejemplo">
+
+        <h3>Tecnologías Principales</h3>
+        <ul>
+            <li><strong>Cloud:</strong> AWS EKS, EC2, ECR, RDS, S3, IAM, CloudWatch</li>
+            <li><strong>Backend:</strong> Django, Django REST Framework, PostgreSQL</li>
+            <li><strong>Microservicios:</strong> Flask, Requests</li>
+            <li><strong>DevOps:</strong> Docker, Docker Compose, Kubernetes, YAML</li>
+            <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+        </ul>
+
+        <h3>Repositorios</h3>
+        <ul>
+            <li><a href="https://github.com/JoelLeyes/BackEnd-proyecto_registro_usuarios" target="_blank">Backend en Django</a></li>
+            <li><a href="https://github.com/JoelLeyes/FrontEnd-proyecto_registro_usuarios" target="_blank">Frontend</a></li>
+            <li><a href="https://github.com/JoelLeyes/Notificaciones-proyecto_registro_usuarios" target="_blank">Microservicio Flask</a></li>
+        </ul>
+
+        <h3>Resumen Técnico</h3>
+        <p>
+            La solución implementa una API REST para registro de usuarios, un sistema de 
+            notificaciones independiente, contenedores Docker para cada servicio y una 
+            infraestructura orquestada completamente en Kubernetes sobre AWS. Las imágenes 
+            fueron enviadas a ECR y los pods desplegados en EKS utilizando manifests YAML.
+        </p>
+
+    </section>
+
+    <footer>
+        <p>© 2025 Joel Leyes – Portafolio Profesional</p>
+    </footer>
+
+</body>
+</html>
