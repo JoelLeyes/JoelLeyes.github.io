@@ -11,50 +11,78 @@
 
     <header>
         <h1>Joel Leyes</h1>
-        <p class="subtitulo">Tecnólogo en Tecnologías de la Información | Cloud & Backend</p>
+        <p class="subtitulo">Tecnólogo en Tecnologías de la Información | Cloud & DevOps Engineer</p>
     </header>
 
     <section class="proyecto">
-        <h2>Proyecto Destacado: Plataforma Cloud en AWS</h2>
+        <h2>Proyecto Destacado: Sistema de Registro de Usuarios en AWS</h2>
         <p class="descripcion">
-            Aplicación full-stack desarrollada con Django, PostgreSQL, Docker y Kubernetes, 
-            desplegada en AWS mediante EKS, ECR, EC2, RDS, S3 e IAM. Incluye un microservicio 
-            adicional en Flask para notificaciones y arquitectura basada en microservicios.
+            Aplicación full-stack desarrollada en Python (Django) y PostgreSQL, desplegada en 
+            Amazon EKS con arquitectura de microservicios. Implementa exposición segura mediante 
+            ALB + ACM (HTTPS) para el frontend y API Gateway con dominio personalizado para el backend. 
+            Incluye microservicio independiente en Flask para notificaciones y cumplimiento SSDLC 
+            con pruebas de seguridad automatizadas.
         </p>
 
         <h3>Arquitectura</h3>
         <p>
-            El sistema está compuesto por un backend en Django, un microservicio independiente 
-            en Flask para notificaciones, y un frontend web ligero. Todos los componentes fueron 
-            dockerizados, subidos a ECR e implementados en Kubernetes (EKS), utilizando RDS como 
-            base de datos y S3 como almacenamiento.
+            El sistema está compuesto por tres microservicios dockerizados: un backend Django (API REST), 
+            un microservicio Flask para notificaciones y un frontend estático con Nginx. Todos los 
+            componentes fueron contenerizados, publicados en Amazon ECR y orquestados en Kubernetes (EKS). 
+            El backend se conecta a PostgreSQL gestionado (RDS) con credenciales almacenadas en Kubernetes Secrets. 
+            El frontend se expone públicamente mediante Application Load Balancer (ALB) con terminación TLS y 
+            certificado de AWS Certificate Manager (ACM), mientras que el backend se publica a través de 
+            Network Load Balancer (NLB) consumido por API Gateway con dominio personalizado.
         </p>
 
-        <img src="img/arquitectura.png" alt="Diagrama de Arquitectura" class="imagen-ejemplo">
-        <img src="img/red.png" alt="Diagrama de Red" class="imagen-ejemplo">
+        <h3>Diagrama de Arquitectura</h3>
+        <img src="img/arquitectura.png" alt="Diagrama de Arquitectura de Microservicios" class="imagen-ejemplo">
 
-        <h3>Tecnologías Principales</h3>
+        <h3>Diagrama de Red</h3>
+        <img src="img/red.png" alt="Diagrama de Red AWS VPC" class="imagen-ejemplo">
+
+        <h3>Tecnologías y Servicios AWS</h3>
         <ul>
-            <li><strong>Cloud:</strong> AWS EKS, EC2, ECR, RDS, S3, IAM, CloudWatch</li>
-            <li><strong>Backend:</strong> Django, Django REST Framework, PostgreSQL</li>
+            <li><strong>Compute & Orquestación:</strong> Amazon EKS (Kubernetes), EC2 (nodos), ECR (registro de imágenes)</li>
+            <li><strong>Networking:</strong> Application Load Balancer (ALB), Network Load Balancer (NLB), API Gateway, VPC, Security Groups</li>
+            <li><strong>Seguridad:</strong> AWS Certificate Manager (ACM), IAM Roles, Kubernetes Secrets</li>
+            <li><strong>Base de Datos:</strong> Amazon RDS (PostgreSQL)</li>
+            <li><strong>Backend:</strong> Python, Django 5.x, Django REST Framework, psycopg2</li>
             <li><strong>Microservicios:</strong> Flask, Requests</li>
-            <li><strong>DevOps:</strong> Docker, Docker Compose, Kubernetes, YAML</li>
-            <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+            <li><strong>DevOps & IaC:</strong> Docker, Kubernetes (Deployments, Services, ConfigMaps, Secrets), YAML, kubectl, AWS CLI</li>
+            <li><strong>Frontend:</strong> HTML, CSS, JavaScript, Nginx</li>
+            <li><strong>Seguridad SSDLC:</strong> Bandit (SAST), pip-audit (SCA), Grype, AWS ECR scan, OWASP ZAP (DAST)</li>
         </ul>
 
-        <h3>Repositorios</h3>
+        <h3>Repositorios del Proyecto</h3>
         <ul>
-            <li><a href="https://github.com/JoelLeyes/BackEnd-proyecto_registro_usuarios" target="_blank">Backend en Django</a></li>
-            <li><a href="https://github.com/JoelLeyes/FrontEnd-proyecto_registro_usuarios" target="_blank">Frontend</a></li>
-            <li><a href="https://github.com/JoelLeyes/Notificaciones-proyecto_registro_usuarios" target="_blank">Microservicio Flask</a></li>
+            <li><a href="https://github.com/JoelLeyes/BackEnd-proyecto_registro_usuarios" target="_blank">Backend (Django + PostgreSQL)</a></li>
+            <li><a href="https://github.com/JoelLeyes/FrontEnd-proyecto_registro_usuarios" target="_blank">Frontend (Nginx + Static)</a></li>
+            <li><a href="https://github.com/JoelLeyes/Notificaciones-proyecto_registro_usuarios" target="_blank">Microservicio de Notificaciones (Flask)</a></li>
+        </ul>
+
+        <h3>Características Técnicas Destacadas</h3>
+        <ul>
+            <li><strong>Exposición Segura:</strong> Frontend con HTTPS mediante ALB + ACM y redirección automática HTTP→HTTPS (301)</li>
+            <li><strong>API Gateway:</strong> Backend expuesto mediante API Gateway con dominio personalizado y certificado ACM</li>
+            <li><strong>Arquitectura de Microservicios:</strong> Comunicación interna vía DNS de Kubernetes (ClusterIP); microservicio de notificaciones accesible solo internamente</li>
+            <li><strong>Alta Disponibilidad:</strong> Backend con 2 réplicas; probes de liveness y readiness en todos los Pods</li>
+            <li><strong>Gestión de Configuración:</strong> Variables en ConfigMaps, credenciales en Secrets; imágenes pinneadas por digest SHA256</li>
+            <li><strong>Recursos y Límites:</strong> Requests y limits de CPU/Memoria definidos en cada Deployment para optimización del scheduler</li>
+            <li><strong>Seguridad:</strong> RDS privado con acceso restringido por Security Groups; análisis SAST/SCA/DAST y escaneo de imágenes con evidencias documentadas</li>
+            <li><strong>Automatización:</strong> Runbook en PowerShell para recuperación del entorno y re-registro de targets en ALB tras reinicios</li>
         </ul>
 
         <h3>Resumen Técnico</h3>
         <p>
-            La solución implementa una API REST para registro de usuarios, un sistema de 
-            notificaciones independiente, contenedores Docker para cada servicio y una 
-            infraestructura orquestada completamente en Kubernetes sobre AWS. Las imágenes 
-            fueron enviadas a ECR y los pods desplegados en EKS utilizando manifests YAML.
+            La solución implementa una API REST para registro de usuarios con PostgreSQL gestionado (RDS), 
+            un sistema de notificaciones independiente y contenedores Docker para cada servicio. 
+            La infraestructura está completamente orquestada en Kubernetes (Amazon EKS) con manifests YAML, 
+            imágenes almacenadas en ECR y exposición pública segura mediante ALB (frontend) y API Gateway (backend). 
+            Se aplicaron buenas prácticas de Kubernetes, hardening de recursos y cumplimiento SSDLC con evidencias 
+            de análisis estático (Bandit), composición (pip-audit, Grype), escaneo de imágenes (ECR) y pruebas 
+            dinámicas (OWASP ZAP). El proyecto incluye documentación detallada, diagramas de arquitectura y red, 
+            y scripts de automatización para operación en entornos efímeros.
         </p>
 
     </section>
