@@ -25,6 +25,41 @@ h1 {
     color: #555;
 }
 
+.proyectos-nav {
+    max-width: 900px;
+    margin: 30px auto;
+    text-align: center;
+    padding: 20px;
+}
+
+.proyectos-nav h2 {
+    color: #333;
+    margin-top: 0;
+}
+
+.links-proyectos {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.enlace-proyecto {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #0066cc;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.enlace-proyecto:hover {
+    background: #0052a3;
+    text-decoration: none;
+}
+
 .proyecto {
     max-width: 900px;
     margin: 40px auto;
