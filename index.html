@@ -14,163 +14,61 @@
         <p class="subtitulo">Tecnólogo en Tecnologías de la Información | Cloud & DevOps Engineer</p>
     </header>
 
-    <section class="proyectos-nav">
-        <h2>Proyectos Destacados</h2>
+    <section class="proyecto">
+        <h2>Bienvenido a mi Portafolio</h2>
+        <p class="descripcion">
+            Soy ingeniero especializado en arquitectura cloud, DevOps y observabilidad en plataformas de alta disponibilidad. 
+            Mi experiencia incluye diseño e implementación de infraestructuras en Amazon AWS (EKS, RDS, ALB, API Gateway, ECR), 
+            orquestación con Kubernetes, desarrollo de aplicaciones full-stack, automatización en CI/CD, y cumplimiento de buenas 
+            prácticas de seguridad (SSDLC: SAST, SCA, DAST).
+        </p>
+
+        <h3>Habilidades Técnicas</h3>
+        <ul>
+            <li><strong>Cloud & Infraestructura:</strong> AWS (EKS, EC2, RDS, S3, CloudFront, ALB, NLB, ECR, IAM), Kubernetes, Docker</li>
+            <li><strong>Backend:</strong> Python (Django), PHP (Laravel 10), REST APIs, Microservicios</li>
+            <li><strong>Frontend:</strong> Vue 3, Vite, Pinia, JavaScript, CSS, PWA</li>
+            <li><strong>Bases de Datos:</strong> PostgreSQL (RDS), MongoDB Atlas, Observabilidad (logging centralizado)</li>
+            <li><strong>DevOps & Automation:</strong> GitHub Actions, GitLab CI, Docker builds, Kubernetes manifests, PowerShell, IaC</li>
+            <li><strong>Seguridad:</strong> Secrets management (Kubernetes Secrets, AWS Secrets Manager), TLS/HTTPS, CORS, IAM</li>
+            <li><strong>Herramientas:</strong> kubectl, AWS CLI, mongosh, git, YAML, bash, PowerShell</li>
+        </ul>
+
+        <h3>Proyectos Destacados</h3>
+        <p>
+            Te invito a explorar mis proyectos. Cada uno representa un desafío técnico resuelto y aprendizajes en producción.
+        </p>
+
         <div class="links-proyectos">
-            <a href="#proyecto-registro" class="enlace-proyecto">📋 Sistema de Registro (Django + AWS)</a>
-            <a href="#proyecto-agenda" class="enlace-proyecto">📅 AgendaOnline (Laravel + Observabilidad)</a>
+            <a href="proyecto-registro.html" class="enlace-proyecto">📋 Sistema de Registro — Django | Python | AWS EKS | Kubernetes | PostgreSQL | Microservicios</a>
+            <a href="proyecto-agenda.html" class="enlace-proyecto">📅 AgendaOnline — Laravel | PHP | MongoDB Atlas | AWS EKS | Kubernetes | PostgreSQL | PWA</a>
         </div>
-    </section>
 
-    <section class="proyecto" id="proyecto-registro">
-        <h2>Sistema de Registro de Usuarios en AWS</h2>
-        <p class="descripcion">
-            Aplicación full-stack desarrollada en Python (Django) y PostgreSQL, desplegada en 
-            Amazon EKS con arquitectura de microservicios. Implementa exposición segura mediante 
-            ALB + ACM (HTTPS) para el frontend y API Gateway con dominio personalizado para el backend. 
-            Incluye microservicio independiente en Flask para notificaciones y cumplimiento SSDLC 
-            con pruebas de seguridad automatizadas.
-        </p>
-
-        <h3>Arquitectura</h3>
+        <h3>Sobre Mi Experiencia</h3>
         <p>
-            El sistema está compuesto por tres microservicios dockerizados: un backend Django (API REST), 
-            un microservicio Flask para notificaciones y un frontend estático con Nginx. Todos los 
-            componentes fueron contenerizados, publicados en Amazon ECR y orquestados en Kubernetes (EKS). 
-            El backend se conecta a PostgreSQL gestionado (RDS) con credenciales almacenadas en Kubernetes Secrets. 
-            El frontend se expone públicamente mediante Application Load Balancer (ALB) con terminación TLS y 
-            certificado de AWS Certificate Manager (ACM), mientras que el backend se publica a través de 
-            Network Load Balancer (NLB) consumido por API Gateway con dominio personalizado.
+            He trabajado en arquitecturas cloud desde cero, incluyendo:
         </p>
-
-        <h3>Diagrama de Arquitectura</h3>
-        <img src="img/arquitectura.png" alt="Diagrama de Arquitectura de Microservicios" class="imagen-ejemplo">
-
-        <h3>Diagrama de Red</h3>
-        <img src="img/red.png" alt="Diagrama de Red AWS VPC" class="imagen-ejemplo">
-
-        <h3>Tecnologías y Servicios AWS</h3>
         <ul>
-            <li><strong>Compute & Orquestación:</strong> Amazon EKS (Kubernetes), EC2 (nodos), ECR (registro de imágenes)</li>
-            <li><strong>Networking:</strong> Application Load Balancer (ALB), Network Load Balancer (NLB), API Gateway, VPC, Security Groups</li>
-            <li><strong>Seguridad:</strong> AWS Certificate Manager (ACM), IAM Roles, Kubernetes Secrets</li>
-            <li><strong>Base de Datos:</strong> Amazon RDS (PostgreSQL)</li>
-            <li><strong>Backend:</strong> Python, Django 5.x, Django REST Framework, psycopg2</li>
-            <li><strong>Microservicios:</strong> Flask, Requests</li>
-            <li><strong>DevOps & IaC:</strong> Docker, Kubernetes (Deployments, Services, ConfigMaps, Secrets), YAML, kubectl, AWS CLI</li>
-            <li><strong>Frontend:</strong> HTML, CSS, JavaScript, Nginx</li>
-            <li><strong>Seguridad SSDLC:</strong> Bandit (SAST), pip-audit (SCA), Grype, AWS ECR scan, OWASP ZAP (DAST)</li>
+            <li>Diseño y despliegue de clústeres Kubernetes (EKS) con múltiples microservicios</li>
+            <li>Integración de múltiples orígenes de datos (PostgreSQL + MongoDB) en la misma aplicación</li>
+            <li>Implementación de logging centralizado y observabilidad en tiempo real</li>
+            <li>Optimización de builds Docker (reducción de 1.59GB a 463KB)</li>
+            <li>Resolución de problemas de conectividad TLS, Network Access, y migraciones en contenedores</li>
+            <li>Cumplimiento de SSDLC con análisis estático (SAST), composición (SCA) y dinámico (DAST)</li>
+            <li>Automatización completa de despliegues (CI/CD verde, rollouts seguros, rollback)</li>
         </ul>
 
-        <h3>Repositorios del Proyecto</h3>
+        <h3>Contacto & Redes</h3>
         <ul>
-            <li><a href="https://github.com/JoelLeyes/BackEnd-proyecto_registro_usuarios" target="_blank">Backend (Django + PostgreSQL)</a></li>
-            <li><a href="https://github.com/JoelLeyes/FrontEnd-proyecto_registro_usuarios" target="_blank">Frontend (Nginx + Static)</a></li>
-            <li><a href="https://github.com/JoelLeyes/Notificaciones-proyecto_registro_usuarios" target="_blank">Microservicio de Notificaciones (Flask)</a></li>
+            <li><a href="https://github.com/JoelLeyes" target="_blank">GitHub</a></li>
+            <li><a href="https://linkedin.com/in/joel-leyes" target="_blank">LinkedIn</a></li>
         </ul>
-
-        <h3>Características Técnicas Destacadas</h3>
-        <ul>
-            <li><strong>Exposición Segura:</strong> Frontend con HTTPS mediante ALB + ACM y redirección automática HTTP→HTTPS (301)</li>
-            <li><strong>API Gateway:</strong> Backend expuesto mediante API Gateway con dominio personalizado y certificado ACM</li>
-            <li><strong>Arquitectura de Microservicios:</strong> Comunicación interna vía DNS de Kubernetes (ClusterIP); microservicio de notificaciones accesible solo internamente</li>
-            <li><strong>Alta Disponibilidad:</strong> Backend con 2 réplicas; probes de liveness y readiness en todos los Pods</li>
-            <li><strong>Gestión de Configuración:</strong> Variables en ConfigMaps, credenciales en Secrets; imágenes pinneadas por digest SHA256</li>
-            <li><strong>Recursos y Límites:</strong> Requests y limits de CPU/Memoria definidos en cada Deployment para optimización del scheduler</li>
-            <li><strong>Seguridad:</strong> RDS privado con acceso restringido por Security Groups; análisis SAST/SCA/DAST y escaneo de imágenes con evidencias documentadas</li>
-            <li><strong>Automatización:</strong> Runbook en PowerShell para recuperación del entorno y re-registro de targets en ALB tras reinicios</li>
-        </ul>
-
-        <h3>Resumen Técnico</h3>
-        <p>
-            La solución implementa una API REST para registro de usuarios con PostgreSQL gestionado (RDS), 
-            un sistema de notificaciones independiente y contenedores Docker para cada servicio. 
-            La infraestructura está completamente orquestada en Kubernetes (Amazon EKS) con manifests YAML, 
-            imágenes almacenadas en ECR y exposición pública segura mediante ALB (frontend) y API Gateway (backend). 
-            Se aplicaron buenas prácticas de Kubernetes, hardening de recursos y cumplimiento SSDLC con evidencias 
-            de análisis estático (Bandit), composición (pip-audit, Grype), escaneo de imágenes (ECR) y pruebas 
-            dinámicas (OWASP ZAP). El proyecto incluye documentación detallada, diagramas de arquitectura y red, 
-            y scripts de automatización para operación en entornos efímeros.
-        </p>
-
-    </section>
-
-    <section class="proyecto" id="proyecto-agenda">
-        <h2>AgendaOnline: Plataforma de Servicios con Observabilidad en MongoDB Atlas</h2>
-        <p class="descripcion">
-            Plataforma completa de marketplace de servicios profesionales desarrollada en Laravel 10 (backend API) 
-            y Vue 3 (frontend), con arquitectura de microservicios en Amazon EKS. Implementa logging centralizado en 
-            MongoDB Atlas para trazabilidad de accesos y errores, integración con PayPal para pagos online, videollamadas 
-            en tiempo real con LiveKit, base de datos relacional en RDS PostgreSQL, y cumplimiento de SSDLC. 
-            El foco técnico incluyó resolver desafíos de conectividad TLS en contenedores, optimización de build Docker, 
-            integración de múltiples orígenes de datos (SQL + NoSQL) y hardening de entrypoint para migraciones idempotentes.
-        </p>
-
-        <h3>Arquitectura</h3>
-        <p>
-            Backend Laravel expuesto vía Network Load Balancer (NLB) → API Gateway con dominio personalizado. 
-            Frontend Vue 3 (Vite) desplegado en S3 + CloudFront con certificado ACM. Ambos se conectan a RDS PostgreSQL 
-            para datos operacionales y a MongoDB Atlas (cluster dedicado en Free Tier) para logging de eventos (conexiones, 
-            errores globales, stack traces). Middleware custom captura intentos de login (exitosos/fallidos) registrándolos 
-            en Atlas con contexto (IP, user-agent, email, timestamp). Exception handler global envía excepciones a Atlas sin 
-            interrumpir el flujo de la app. ECR almacena imágenes, GitHub Actions ejecuta tests + SAST, y kubectl orquesta 
-            deployments con Secrets para credenciales de Atlas.
-        </p>
-
-        <h3>Tecnologías y Servicios</h3>
-        <ul>
-            <li><strong>Compute & Orquestación:</strong> Amazon EKS, ECR, EC2</li>
-            <li><strong>Networking:</strong> NLB, API Gateway, VPC, CloudFront (frontend), Security Groups</li>
-            <li><strong>Seguridad:</strong> AWS Certificate Manager (ACM), IAM, Kubernetes Secrets</li>
-            <li><strong>Bases de Datos:</strong> RDS PostgreSQL (aplicación), MongoDB Atlas (logs)</li>
-            <li><strong>Backend:</strong> Laravel 10, Sanctum (auth), Eloquent ORM, REST API</li>
-            <li><strong>Frontend:</strong> Vue 3, Vite, Pinia (state), Axios, CSS módular, PWA (Service Worker)</li>
-            <li><strong>Pagos:</strong> PayPal Checkout SDK integration</li>
-            <li><strong>Videollamadas:</strong> LiveKit (WebRTC real-time)</li>
-            <li><strong>DevOps:</strong> Docker, Kubernetes, GitHub Actions (CI/CD), kubectl, AWS CLI</li>
-            <li><strong>Logging & Observabilidad:</strong> MongoDB PHP Driver, Custom AtlasLogService, middleware de trazabilidad</li>
-            <li><strong>Herramientas:</strong> mongosh (CLI MongoDB), kubectl, docker-cli, PowerShell scripts</li>
-        </ul>
-
-        <h3>Repositorios del Proyecto</h3>
-        <ul>
-            <li><a href="https://github.com/JoelLeyes/Proyecto2026-Backend_PHP" target="_blank">Backend (Laravel + MongoDB Logging)</a></li>
-            <li><a href="https://github.com/JoelLeyes/Proyecto2026-Frontend_PHP" target="_blank">Frontend (Vue 3 + Vite)</a></li>
-            <li><a href="https://app.agendaonline.cloud-ip.cc" target="_blank">Demo en Vivo</a></li>
-        </ul>
-
-        <h3>Características Técnicas Destacadas</h3>
-        <ul>
-            <li><strong>Logging Centralizado en Atlas:</strong> PHP MongoDB Client directo a Atlas sin intermediarios; captura de login (exitosos/fallidos) vía middleware; excepciones globales capturadas automáticamente</li>
-            <li><strong>Trazabilidad Completa:</strong> Cada log incluye IP, user-agent, email, ruta, método HTTP, timestamp ISO8601 y contexto custom (user_id, rol, motivo de error)</li>
-            <li><strong>Build Optimizado:</strong> .dockerignore reduce contexto de 1.59GB → 463KB; GitHub Actions soporta ext-mongodb con --ignore-platform-req</li>
-            <li><strong>Resiliencia de Entrypoint:</strong> APP_KEY desde env si existe; migraciones opt-in (RUN_MIGRATIONS=true/false); sin CrashLoopBackOff en redeploy</li>
-            <li><strong>Gestión de Secrets:</strong> MongoDB URI, DB name, collection en Kubernetes Secrets; imágenes pinneadas por digest; Composer lock con versiones fijas</li>
-            <li><strong>Autenticación Stateless:</strong> Sanctum Bearer tokens; CORS permitido para frontend en CloudFront</li>
-            <li><strong>Validación y Seguridad:</strong> Requests de Laravel, Password hashing, email unique, roles (cliente/profesional/admin)</li>
-            <li><strong>Multi-origen de Datos:</strong> Misma app consulta RDS (Eloquent) y MongoDB (AtlasLogService), manteniendo separación de concerns (app data ≠ logs)</li>
-        </ul>
-
-        <h3>Desafíos Resueltos</h3>
-        <ul>
-            <li><strong>TLS/HTTPS Failing en Contenedor:</strong> Agregó ca-certificates + pecl install mongodb; actualización de CA en Dockerfile</li>
-            <li><strong>Network Access Rejection en Atlas:</strong> Identificó EKS egress IP (3.92.26.213), configuró allowlist (hoy 0.0.0.0/0 para desarrollo, recomendación: NAT Gateway + Elastic IP)</li>
-            <li><strong>Timeout en Docker Build:</strong> Creó .dockerignore excluyendo vendor, .git, storage/logs; reducción de 1.59GB a 463KB</li>
-            <li><strong>CrashLoopBackOff en Redeploy:</strong> Migraciones redundantes rompían pod; corrigió entrypoint para ser idempotente</li>
-            <li><strong>Compatibilidad MongoDB en CI/CD:</strong> GitHub Actions no tenía ext-mongodb por defecto; agregó --ignore-platform-req en Composer para tests</li>
-        </ul>
-
-        <h3>Resumen Técnico</h3>
-        <p>
-            Sistema de marketplace SaaS con logging en tiempo real en MongoDB Atlas, combinando la robustez de RDS PostgreSQL 
-            (datos operacionales) con la flexibilidad de MongoDB (logs y eventos). Cada intento de login y excepción no controlada 
-            se registra automáticamente, habilitando debugging rápido y auditoría de accesos. La infraestructura es completamente 
-            dockerizada y orquestada en Kubernetes (EKS), con CI/CD green en GitHub Actions. El desafío de integración multi-cloud 
-            (RDS + MongoDB Atlas) fue resuelto mediante servicios inyectables en Laravel (AtlasLogService) y middleware de bajo acoplamiento. 
-            Propiedad intelectual: arquitectura de logging, manejo de errores graceful, optimización de builds y automatización de 
-            despliegues con redeploy.ps1.
-        </p>
 
     </section>
 
     <footer>
+        <p>© 2025 Joel Leyes – Portafolio Profesional</p>
+    </footer>
+
+</body>
+</html>
