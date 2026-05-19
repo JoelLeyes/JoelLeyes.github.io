@@ -1,12 +1,65 @@
 const canvas = document.getElementById('gameCanvas');
 const startBtn = document.getElementById('startBtn');
+const ctx = canvas ? canvas.getContext('2d') : null;
 
-function drawStaticScene() {
+const gameState = {
+	isRunning: false,
+	lastTime: 0,
+	leftPaddle: {
+		x: 24,
+		y: 0,
+		width: 12,
+		height: 90
+	},
+	rightPaddle: {
+		x: 0,
+		y: 0,
+		width: 12,
+		height: 90
+	},
+	ball: {
+		x: 0,
+		y: 0,
+		radius: 8
+	}
+};
+
+function initializeScene() {
 	if (!canvas) {
 		return;
 	}
 
-	const ctx = canvas.getContext('2d');
+	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
+	gameState.rightPaddle.x = canvas.width - 36;
+	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
+	gameState.ball.x = canvas.width / 2;
+	gameState.ball.y = canvas.height / 2;
+}
+
+function startGame() {
+	if (!canvas || gameState.isRunning) {
+		return;
+	}
+
+	gameState.isRunning = true;
+	gameState.lastTime = performance.now();
+	requestAnimationFrame(gameLoop);
+}
+
+function update(deltaTime) {
+	if (!gameState.isRunning) {
+		return;
+	}
+
+	// Paso 3: logica de movimiento se implementa en el siguiente commit.
+	void deltaTime;
+}
+
+function draw() {
+	if (!canvas || !ctx) {
+		return;
+	}
+
 
 	ctx.fillStyle = '#111827';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -20,20 +73,41 @@ function drawStaticScene() {
 	ctx.setLineDash([]);
 
 	ctx.fillStyle = '#60a5fa';
-	ctx.fillRect(24, canvas.height / 2 - 45, 12, 90);
-	ctx.fillRect(canvas.width - 36, canvas.height / 2 - 45, 12, 90);
+	ctx.fillRect(
+		gameState.leftPaddle.x,
+		gameState.leftPaddle.y,
+		gameState.leftPaddle.width,
+		gameState.leftPaddle.height
+	);
+	ctx.fillRect(
+		gameState.rightPaddle.x,
+		gameState.rightPaddle.y,
+		gameState.rightPaddle.width,
+		gameState.rightPaddle.height
+	);
 
 	ctx.beginPath();
-	ctx.arc(canvas.width / 2, canvas.height / 2, 8, 0, Math.PI * 2);
+	ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
 	ctx.fillStyle = '#f8fafc';
 	ctx.fill();
 }
 
-if (startBtn) {
-	startBtn.addEventListener('click', () => {
-		drawStaticScene();
-		console.log('Commit 2: dibujo estatico de escena listo.');
-	});
+function gameLoop(currentTime) {
+	if (!gameState.isRunning) {
+		return;
+	}
+
+	const deltaTime = (currentTime - gameState.lastTime) / 1000;
+	gameState.lastTime = currentTime;
+
+	update(deltaTime);
+	draw();
+	requestAnimationFrame(gameLoop);
 }
 
-drawStaticScene();
+if (startBtn) {
+	startBtn.addEventListener('click', startGame);
+}
+
+initializeScene();
+draw();

@@ -1,0 +1,16 @@
+Estructura base
+
+gameState: objeto central con el estado del juego 
+(running, tiempo, paletas, pelota).
+
+initializeScene: coloca paletas y pelota en su posicion inicial.
+startGame: inicia el juego y dispara el loop.
+update: actualiza la logica del estado del juego por frame.
+draw: dibuja el estado actual en canvas.
+
+gameLoop: orquesta cada frame 
+(calcula tiempo, llama update y draw, y vuelve a ejecutarse).
+
+Flujo:
+initializeScene -> draw -> click en boton -> startGame -> 
+gameLoop -> update + draw -> gameLoop...
