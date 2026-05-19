@@ -1,0 +1,82 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.contenedor {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #00d4ff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    color: #b0b0b0;
+}
+
+canvas {
+    border: 3px solid #00d4ff;
+    background: #000;
+    display: block;
+    margin: 0 auto 30px;
+    cursor: none;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.controles {
+    background: rgba(0, 212, 255, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px solid #00d4ff;
+}
+
+.controles p {
+    margin: 10px 0;
+}
+
+button {
+    padding: 12px 30px;
+    font-size: 1.1em;
+    background: #00d4ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #000;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #00f5ff;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+}
+
+button:active {
+    transform: scale(0.98);
+}
