@@ -3,10 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio 3 - En construcción</title>
+    <title>Laboratorio 3 - Pong Intervenido</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hola mundo</h1>
-    <p>Laboratorio 3 en construcción.</p>
+    <main class="contenedor">
+        <header class="encabezado">
+            <h1>Pong Intervenido</h1>
+            <p>Laboratorio 3 - Taller de Videojuegos UTEC 2026</p>
+        </header>
+
+        <section class="area-juego" aria-label="Area principal del juego">
+            <canvas id="gameCanvas" width="800" height="400"></canvas>
+        </section>
+
+        <section class="panel" aria-label="Panel de controles">
+            <h2>Controles</h2>
+            <p>Jugador 1 (Izquierda): W/S</p>
+            <p>Jugador 2 (Derecha): Flecha arriba / Flecha abajo</p>
+            <button id="startBtn" type="button">Iniciar Juego</button>
+        </section>
+    </main>
+
+    <script src="game.js"></script>
 </body>
 </html>
