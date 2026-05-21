@@ -20,7 +20,9 @@ const gameState = {
 	ball: {
 		x: 0,
 		y: 0,
-		radius: 8
+		radius: 8,
+		vx: 0,
+		vy: 0
 	}
 };
 
@@ -34,6 +36,13 @@ function initializeScene() {
 	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
 	gameState.ball.x = canvas.width / 2;
 	gameState.ball.y = canvas.height / 2;
+
+	// Velocidad inicial de la pelota en px/s (aleatoria hacia izquierda o derecha)
+	const speed = 220;
+	const angle = (Math.random() * 0.6 - 0.3); // -0.3..0.3 radians para variar eje Y
+	const dir = Math.random() > 0.5 ? 1 : -1;
+	gameState.ball.vx = dir * speed;
+	gameState.ball.vy = speed * Math.sin(angle);
 }
 
 function startGame() {
@@ -51,8 +60,31 @@ function update(deltaTime) {
 		return;
 	}
 
-	// Paso 3: logica de movimiento se implementa en el siguiente commit.
-	void deltaTime;
+	// Movimiento básico de la pelota (sin colisiones con paletas aún)
+	const b = gameState.ball;
+	b.x += b.vx * deltaTime;
+	b.y += b.vy * deltaTime;
+
+	// Rebote en borde superior e inferior
+	if (b.y - b.radius < 0) {
+		b.y = b.radius;
+		b.vy *= -1;
+	}
+
+	if (b.y + b.radius > canvas.height) {
+		b.y = canvas.height - b.radius;
+		b.vy *= -1;
+	}
+
+	// Si llega a izquierda o derecha, lo reiniciamos al centro (sin puntaje aún)
+	if (b.x - b.radius < 0 || b.x + b.radius > canvas.width) {
+		b.x = canvas.width / 2;
+		b.y = canvas.height / 2;
+		// invertir direccion horizontal para la siguiente ronda
+		b.vx *= -1;
+		// pequeña variacion vertical
+		b.vy = (Math.random() * 200 - 100);
+	}
 }
 
 function draw() {
