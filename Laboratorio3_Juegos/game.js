@@ -26,6 +26,13 @@ const gameState = {
 	}
 };
 
+const input = {
+	up1: false,
+	down1: false,
+	up2: false,
+	down2: false
+};
+
 function initializeScene() {
 	if (!canvas) {
 		return;
@@ -85,6 +92,26 @@ function update(deltaTime) {
 		// pequeña variacion vertical
 		b.vy = (Math.random() * 200 - 100);
 	}
+
+	// Mover paletas según input
+	const speed = 300; // px/s
+
+	if (input.up1) {
+		gameState.leftPaddle.y -= speed * deltaTime;
+	}
+	if (input.down1) {
+		gameState.leftPaddle.y += speed * deltaTime;
+	}
+	if (input.up2) {
+		gameState.rightPaddle.y -= speed * deltaTime;
+	}
+	if (input.down2) {
+		gameState.rightPaddle.y += speed * deltaTime;
+	}
+
+	// Limitar paletas dentro del canvas
+	gameState.leftPaddle.y = Math.max(0, Math.min(gameState.leftPaddle.y, canvas.height - gameState.leftPaddle.height));
+	gameState.rightPaddle.y = Math.max(0, Math.min(gameState.rightPaddle.y, canvas.height - gameState.rightPaddle.height));
 }
 
 function draw() {
@@ -143,3 +170,44 @@ if (startBtn) {
 
 initializeScene();
 draw();
+
+// Listeners de teclado para controlar paletas
+window.addEventListener('keydown', (e) => {
+	if (!e) return;
+	switch (e.key) {
+		case 'w':
+		case 'W':
+			input.up1 = true;
+			break;
+		case 's':
+		case 'S':
+			input.down1 = true;
+			break;
+		case 'ArrowUp':
+			input.up2 = true;
+			break;
+		case 'ArrowDown':
+			input.down2 = true;
+			break;
+	}
+});
+
+window.addEventListener('keyup', (e) => {
+	if (!e) return;
+	switch (e.key) {
+		case 'w':
+		case 'W':
+			input.up1 = false;
+			break;
+		case 's':
+		case 'S':
+			input.down1 = false;
+			break;
+		case 'ArrowUp':
+			input.up2 = false;
+			break;
+		case 'ArrowDown':
+			input.down2 = false;
+			break;
+	}
+});
