@@ -94,6 +94,8 @@ function updateScarlet(deltaTime) {
 		gameState.ball.scarlet = false;
 		gameState.ball.scarletTimer = 0;
 		gameState.ball.rebounds = 0; // Resetear rebotes cuando termina Scarlet Time
+		// Recalcular nuevo threshold para evitar Scarlet Times seguidos
+		gameState.scarletThreshold = Math.floor(Math.random() * 5) + 5;
 	}
 }
 
