@@ -60,8 +60,8 @@ function initializeScene() {
 	gameState.ball.scarletTimer = 0;
 	gameState.ball.rebounds = 0;
 
-	// Generar threshold de Escarlata para esta ronda
-	gameState.scarletThreshold = Math.floor(Math.random() * 3) + 3;
+	// Generar threshold de Escarlata para esta ronda (5-9 rebotes)
+	gameState.scarletThreshold = Math.floor(Math.random() * 5) + 5;
 
 	// Velocidad inicial de la pelota en px/s (aleatoria hacia izquierda o derecha)
 	const speed = 220;
@@ -102,8 +102,8 @@ function resetRound(direction) {
 	gameState.ball.scarletTimer = 0;
 	gameState.ball.rebounds = 0;
 
-	// Generar nuevo threshold de Escarlata para esta ronda
-	gameState.scarletThreshold = Math.floor(Math.random() * 3) + 3;
+	// Generar nuevo threshold de Escarlata para esta ronda (5-9 rebotes)
+	gameState.scarletThreshold = Math.floor(Math.random() * 5) + 5;
 
 	// Aumentar contador de rondas
 	gameState.rounds += 1;
@@ -388,17 +388,11 @@ function checkPaddleCollision(paddle) {
 		const hitPos = (b.y - p.y) / p.height;
 		b.vy += (hitPos - 0.5) * 200;
 
-		// Si está en Escarlata, duplicar velocidad
-		let speedMultiplier = 1.0;
-		if (b.scarlet) {
-			speedMultiplier = 2.0;
-		}
-
-		// Aumentar ligeramente la velocidad y normalizar el vector
+		// Aumentar ligeramente la velocidad (8% en tiempo normal, sin boost en Escarlata)
 		let speed = Math.hypot(b.vx, b.vy);
 		const maxSpeed = 900;
-		const speedUp = 1.06; // 6% por rebote
-		speed = Math.min(speed * speedUp * speedMultiplier, maxSpeed);
+		const speedUp = b.scarlet ? 1.0 : 1.08; // 8% en normal, sin cambio en Escarlata
+		speed = Math.min(speed * speedUp, maxSpeed);
 		const angle = Math.atan2(b.vy, b.vx);
 		b.vx = Math.cos(angle) * speed;
 		b.vy = Math.sin(angle) * speed;
