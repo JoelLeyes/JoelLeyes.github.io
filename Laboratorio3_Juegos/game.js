@@ -75,6 +75,13 @@ function triggerScarlet() {
 	gameState.ball.scarlet = true;
 	gameState.ball.scarletTimer = 8; // dura 8 segundos
 	gameState.ball.rebounds = 0;
+
+	// Aumentar velocidad de golpe al activar Scarlet Time (1.5x)
+	const speed = Math.hypot(gameState.ball.vx, gameState.ball.vy);
+	const angle = Math.atan2(gameState.ball.vy, gameState.ball.vx);
+	const newSpeed = Math.min(speed * 1.5, 900);
+	gameState.ball.vx = Math.cos(angle) * newSpeed;
+	gameState.ball.vy = Math.sin(angle) * newSpeed;
 }
 
 function updateScarlet(deltaTime) {
