@@ -12,19 +12,20 @@ const gameState = {
 	paused: false,
 	gameOver: false,
 	winner: null,
+	scarletThreshold: 0,
 	leftPaddle: {
 		x: 24,
 		y: 0,
 		width: 12,
-		height: Math.random() * 30 + 60,
-		normalHeight: null
+		height: 90,
+		normalHeight: 90
 	},
 	rightPaddle: {
 		x: 0,
 		y: 0,
 		width: 12,
-		height: Math.random() * 30 + 60,
-		normalHeight: null
+		height: 90,
+		normalHeight: 90
 	},
 	ball: {
 		x: 0,
@@ -50,8 +51,16 @@ function initializeScene() {
 		return;
 	}
 
-	gameState.leftPaddle.normalHeight = gameState.leftPaddle.height;
-	gameState.rightPaddle.normalHeight = gameState.rightPaddle.height;
+	// Generar alturas aleatorias solo la primera vez
+	if (gameState.leftPaddle.normalHeight === 90 && gameState.rounds === 1) {
+		const randomHeightLeft = Math.random() * 30 + 60;
+		const randomHeightRight = Math.random() * 30 + 60;
+		gameState.leftPaddle.height = randomHeightLeft;
+		gameState.leftPaddle.normalHeight = randomHeightLeft;
+		gameState.rightPaddle.height = randomHeightRight;
+		gameState.rightPaddle.normalHeight = randomHeightRight;
+	}
+
 	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
 	gameState.rightPaddle.x = canvas.width - 36;
 	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
@@ -60,6 +69,9 @@ function initializeScene() {
 	gameState.ball.scarlet = false;
 	gameState.ball.scarletTimer = 0;
 	gameState.ball.rebounds = 0;
+
+	// Generar threshold de Escarlata para esta ronda
+	gameState.scarletThreshold = Math.floor(Math.random() * 3) + 3;
 
 	// Velocidad inicial de la pelota en px/s (aleatoria hacia izquierda o derecha)
 	const speed = 220;
@@ -99,6 +111,9 @@ function resetRound(direction) {
 	gameState.ball.scarlet = false;
 	gameState.ball.scarletTimer = 0;
 	gameState.ball.rebounds = 0;
+
+	// Generar nuevo threshold de Escarlata para esta ronda
+	gameState.scarletThreshold = Math.floor(Math.random() * 3) + 3;
 
 	// Aumentar contador de rondas
 	gameState.rounds += 1;
@@ -364,9 +379,8 @@ function checkPaddleCollision(paddle) {
 		// Contar rebotes
 		b.rebounds += 1;
 
-		// Activar Tiempo Escarlata cada 3-5 rebotes (aleatorio)
-		const scarletThreshold = Math.floor(Math.random() * 3) + 3;
-		if (b.rebounds >= scarletThreshold && !b.scarlet) {
+		// Activar Tiempo Escarlata cuando se alcanza el threshold
+		if (b.rebounds >= gameState.scarletThreshold && !b.scarlet) {
 			triggerScarlet();
 		}
 
