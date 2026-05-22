@@ -51,16 +51,6 @@ function initializeScene() {
 		return;
 	}
 
-	// Generar alturas aleatorias solo la primera vez
-	if (gameState.leftPaddle.normalHeight === 90 && gameState.rounds === 1) {
-		const randomHeightLeft = Math.random() * 30 + 60;
-		const randomHeightRight = Math.random() * 30 + 60;
-		gameState.leftPaddle.height = randomHeightLeft;
-		gameState.leftPaddle.normalHeight = randomHeightLeft;
-		gameState.rightPaddle.height = randomHeightRight;
-		gameState.rightPaddle.normalHeight = randomHeightRight;
-	}
-
 	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
 	gameState.rightPaddle.x = canvas.width - 36;
 	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
