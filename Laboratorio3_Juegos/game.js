@@ -10,6 +10,8 @@ const gameState = {
 	scoreLeft: 0,
 	scoreRight: 0,
 	paused: false,
+	gameOver: false,
+	winner: null,
 	leftPaddle: {
 		x: 24,
 		y: 0,
@@ -126,11 +128,21 @@ function update(deltaTime) {
 		if (b.x - b.radius < 0) {
 			gameState.scoreRight += 1;
 			gameState.lastScorer = 'Right';
-			resetRound(1);
+			if (gameState.scoreRight >= 10) {
+				gameState.gameOver = true;
+				gameState.winner = 'Right';
+			} else {
+				resetRound(1);
+			}
 		} else {
 			gameState.scoreLeft += 1;
 			gameState.lastScorer = 'Left';
-			resetRound(-1);
+			if (gameState.scoreLeft >= 10) {
+				gameState.gameOver = true;
+				gameState.winner = 'Left';
+			} else {
+				resetRound(-1);
+			}
 		}
 
 		return;
@@ -226,6 +238,22 @@ function draw() {
 		ctx.font = '16px Arial';
 		ctx.fillText('Pulsa P para reanudar', canvas.width / 2, canvas.height / 2 + 24);
 	}
+
+	// Overlay de fin de partida
+	if (gameState.gameOver) {
+		ctx.fillStyle = 'rgba(0,0,0,0.7)';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = '#00ff00';
+		ctx.font = 'bold 48px Arial';
+		ctx.textAlign = 'center';
+		const winnerText = gameState.winner === 'Right' ? 'JUGADOR 2 GANA' : 'JUGADOR 1 GANA';
+		ctx.fillText(winnerText, canvas.width / 2, canvas.height / 2 - 20);
+		ctx.font = '18px Arial';
+		ctx.fillStyle = '#e2e8f0';
+		ctx.fillText(`${gameState.scoreLeft} - ${gameState.scoreRight}`, canvas.width / 2, canvas.height / 2 + 30);
+		ctx.font = '14px Arial';
+		ctx.fillText('Reinicia la partida con el botón para jugar de nuevo', canvas.width / 2, canvas.height / 2 + 60);
+	}
 }
 
 function checkPaddleCollision(paddle) {
@@ -276,7 +304,7 @@ function gameLoop(currentTime) {
 	const deltaTime = (currentTime - gameState.lastTime) / 1000;
 	gameState.lastTime = currentTime;
 
-	if (!gameState.paused) {
+	if (!gameState.paused && !gameState.gameOver) {
 		update(deltaTime);
 	}
 	draw();
