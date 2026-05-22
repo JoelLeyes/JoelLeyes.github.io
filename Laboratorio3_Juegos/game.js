@@ -69,6 +69,24 @@ function initializeScene() {
 	gameState.ball.vy = speed * Math.sin(angle);
 }
 
+function triggerScarlet() {
+	gameState.ball.scarlet = true;
+	gameState.ball.scarletTimer = 8; // dura 8 segundos
+	gameState.ball.rebounds = 0;
+}
+
+function updateScarlet(deltaTime) {
+	if (!gameState.ball.scarlet) {
+		return;
+	}
+
+	gameState.ball.scarletTimer -= deltaTime;
+	if (gameState.ball.scarletTimer <= 0) {
+		gameState.ball.scarlet = false;
+		gameState.ball.scarletTimer = 0;
+	}
+}
+
 function resetRound(direction) {
 	gameState.ball.x = canvas.width / 2;
 	gameState.ball.y = canvas.height / 2;
@@ -76,6 +94,11 @@ function resetRound(direction) {
 	gameState.ball.vy = (Math.random() * 200) - 100;
 	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
 	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
+
+	// Desactivar Tiempo Escarlata al reiniciar
+	gameState.ball.scarlet = false;
+	gameState.ball.scarletTimer = 0;
+	gameState.ball.rebounds = 0;
 
 	// Aumentar contador de rondas
 	gameState.rounds += 1;
@@ -150,6 +173,9 @@ function update(deltaTime) {
 	if (!gameState.isRunning) {
 		return;
 	}
+
+	// Actualizar Tiempo Escarlata
+	updateScarlet(deltaTime);
 
 	// Movimiento básico de la pelota (sin colisiones con paletas aún)
 	const b = gameState.ball;
@@ -239,22 +265,29 @@ function draw() {
 	ctx.setLineDash([]);
 
 	ctx.fillStyle = '#60a5fa';
+
+	// Calcular altura de paletas: achicadas si Escarlata está activo
+	const paletteHeightLeft = gameState.ball.scarlet ? gameState.leftPaddle.normalHeight * 0.7 : gameState.leftPaddle.height;
+	const paletteHeightRight = gameState.ball.scarlet ? gameState.rightPaddle.normalHeight * 0.7 : gameState.rightPaddle.height;
+	const offsetLeft = (gameState.leftPaddle.height - paletteHeightLeft) / 2;
+	const offsetRight = (gameState.rightPaddle.height - paletteHeightRight) / 2;
+
 	ctx.fillRect(
 		gameState.leftPaddle.x,
-		gameState.leftPaddle.y,
+		gameState.leftPaddle.y + offsetLeft,
 		gameState.leftPaddle.width,
-		gameState.leftPaddle.height
+		paletteHeightLeft
 	);
 	ctx.fillRect(
 		gameState.rightPaddle.x,
-		gameState.rightPaddle.y,
+		gameState.rightPaddle.y + offsetRight,
 		gameState.rightPaddle.width,
-		gameState.rightPaddle.height
+		paletteHeightRight
 	);
 
 	ctx.beginPath();
 	ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
-	ctx.fillStyle = '#f8fafc';
+	ctx.fillStyle = gameState.ball.scarlet ? '#ff0000' : '#f8fafc';
 	ctx.fill();
 
 	// Marcador
@@ -273,6 +306,15 @@ function draw() {
 	if (gameState.lastScorer) {
 		ctx.font = '14px Arial';
 		ctx.fillText(`Último punto: ${gameState.lastScorer}`, canvas.width / 2, 92);
+	}
+
+	// Indicador de Tiempo Escarlata
+	if (gameState.ball.scarlet) {
+		ctx.fillStyle = '#ff0000';
+		ctx.font = 'bold 18px Arial';
+		ctx.fillText('TIEMPO ESCARLATA ⚡', canvas.width / 2, canvas.height - 15);
+		ctx.font = '12px Arial';
+		ctx.fillText(`${gameState.ball.scarletTimer.toFixed(1)}s`, canvas.width / 2, canvas.height + 3);
 	}
 
 	// Overlay de pausa
@@ -319,6 +361,15 @@ function checkPaddleCollision(paddle) {
 
 	// Si la distancia es menor que el radio, hay colisión
 	if (dist < b.radius) {
+		// Contar rebotes
+		b.rebounds += 1;
+
+		// Activar Tiempo Escarlata cada 3-5 rebotes (aleatorio)
+		const scarletThreshold = Math.floor(Math.random() * 3) + 3;
+		if (b.rebounds >= scarletThreshold && !b.scarlet) {
+			triggerScarlet();
+		}
+
 		// Asegurar que la pelota quede fuera de la paleta (evitar pegado)
 		if (p.x < canvas.width / 2) {
 			b.x = p.x + p.width + b.radius;
@@ -333,11 +384,17 @@ function checkPaddleCollision(paddle) {
 		const hitPos = (b.y - p.y) / p.height;
 		b.vy += (hitPos - 0.5) * 200;
 
+		// Si está en Escarlata, duplicar velocidad
+		let speedMultiplier = 1.0;
+		if (b.scarlet) {
+			speedMultiplier = 2.0;
+		}
+
 		// Aumentar ligeramente la velocidad y normalizar el vector
 		let speed = Math.hypot(b.vx, b.vy);
 		const maxSpeed = 900;
 		const speedUp = 1.06; // 6% por rebote
-		speed = Math.min(speed * speedUp, maxSpeed);
+		speed = Math.min(speed * speedUp * speedMultiplier, maxSpeed);
 		const angle = Math.atan2(b.vy, b.vx);
 		b.vx = Math.cos(angle) * speed;
 		b.vy = Math.sin(angle) * speed;
