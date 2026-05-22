@@ -388,10 +388,10 @@ function checkPaddleCollision(paddle) {
 		const hitPos = (b.y - p.y) / p.height;
 		b.vy += (hitPos - 0.5) * 200;
 
-		// Aumentar ligeramente la velocidad (8% en tiempo normal, sin boost en Escarlata)
+		// Aumentar ligeramente la velocidad (8% en normal, 15% en Escarlata)
 		let speed = Math.hypot(b.vx, b.vy);
 		const maxSpeed = 900;
-		const speedUp = b.scarlet ? 1.0 : 1.08; // 8% en normal, sin cambio en Escarlata
+		const speedUp = b.scarlet ? 1.15 : 1.08; // 15% en Escarlata, 8% en normal
 		speed = Math.min(speed * speedUp, maxSpeed);
 		const angle = Math.atan2(b.vy, b.vx);
 		b.vx = Math.cos(angle) * speed;
