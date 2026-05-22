@@ -5,6 +5,8 @@ const ctx = canvas ? canvas.getContext('2d') : null;
 const gameState = {
 	isRunning: false,
 	lastTime: 0,
+	scoreLeft: 0,
+	scoreRight: 0,
 	leftPaddle: {
 		x: 24,
 		y: 0,
@@ -52,6 +54,15 @@ function initializeScene() {
 	gameState.ball.vy = speed * Math.sin(angle);
 }
 
+function resetRound(direction) {
+	gameState.ball.x = canvas.width / 2;
+	gameState.ball.y = canvas.height / 2;
+	gameState.ball.vx = direction * 220;
+	gameState.ball.vy = (Math.random() * 200) - 100;
+	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
+	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
+}
+
 function startGame() {
 	if (!canvas || gameState.isRunning) {
 		return;
@@ -83,14 +94,17 @@ function update(deltaTime) {
 		b.vy *= -1;
 	}
 
-	// Si llega a izquierda o derecha, lo reiniciamos al centro (sin puntaje aún)
+	// Si llega a izquierda o derecha, sumamos punto y reiniciamos la ronda
 	if (b.x - b.radius < 0 || b.x + b.radius > canvas.width) {
-		b.x = canvas.width / 2;
-		b.y = canvas.height / 2;
-		// invertir direccion horizontal para la siguiente ronda
-		b.vx *= -1;
-		// pequeña variacion vertical
-		b.vy = (Math.random() * 200 - 100);
+		if (b.x - b.radius < 0) {
+			gameState.scoreRight += 1;
+			resetRound(1);
+		} else {
+			gameState.scoreLeft += 1;
+			resetRound(-1);
+		}
+
+		return;
 	}
 
 	// Mover paletas según input
@@ -153,6 +167,13 @@ function draw() {
 	ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
 	ctx.fillStyle = '#f8fafc';
 	ctx.fill();
+
+	// Marcador
+	ctx.fillStyle = '#e2e8f0';
+	ctx.font = 'bold 28px Arial';
+	ctx.textAlign = 'center';
+	ctx.fillText(gameState.scoreLeft, canvas.width / 4, 40);
+	ctx.fillText(gameState.scoreRight, (canvas.width * 3) / 4, 40);
 }
 
 function checkPaddleCollision(paddle) {
