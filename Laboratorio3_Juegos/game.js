@@ -5,6 +5,8 @@ const ctx = canvas ? canvas.getContext('2d') : null;
 const gameState = {
 	isRunning: false,
 	lastTime: 0,
+	rounds: 1,
+	lastScorer: null,
 	scoreLeft: 0,
 	scoreRight: 0,
 	leftPaddle: {
@@ -61,6 +63,9 @@ function resetRound(direction) {
 	gameState.ball.vy = (Math.random() * 200) - 100;
 	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
 	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
+
+	// Aumentar contador de rondas
+	gameState.rounds += 1;
 }
 
 function startGame() {
@@ -98,9 +103,11 @@ function update(deltaTime) {
 	if (b.x - b.radius < 0 || b.x + b.radius > canvas.width) {
 		if (b.x - b.radius < 0) {
 			gameState.scoreRight += 1;
+			gameState.lastScorer = 'Right';
 			resetRound(1);
 		} else {
 			gameState.scoreLeft += 1;
+			gameState.lastScorer = 'Left';
 			resetRound(-1);
 		}
 
@@ -174,6 +181,17 @@ function draw() {
 	ctx.textAlign = 'center';
 	ctx.fillText(gameState.scoreLeft, canvas.width / 4, 40);
 	ctx.fillText(gameState.scoreRight, (canvas.width * 3) / 4, 40);
+
+	// Información adicional: ronda y servicio
+	ctx.font = '16px Arial';
+	const server = gameState.ball.vx > 0 ? 'Derecha' : 'Izquierda';
+	ctx.fillText(`Ronda ${gameState.rounds} • Servicio: ${server}`, canvas.width / 2, 70);
+
+	// Último punto
+	if (gameState.lastScorer) {
+		ctx.font = '14px Arial';
+		ctx.fillText(`Último punto: ${gameState.lastScorer}`, canvas.width / 2, 92);
+	}
 }
 
 function checkPaddleCollision(paddle) {
@@ -191,12 +209,28 @@ function checkPaddleCollision(paddle) {
 
 	// Si la distancia es menor que el radio, hay colisión
 	if (dist < b.radius) {
-		// Invertir velocidad horizontal y asegurar que la pelota no se queda pegada
-		b.vx *= -1;
+		// Asegurar que la pelota quede fuera de la paleta (evitar pegado)
+		if (p.x < canvas.width / 2) {
+			b.x = p.x + p.width + b.radius;
+		} else {
+			b.x = p.x - b.radius;
+		}
 
-		// Pequeña variación en Y según dónde pegue en la paleta
+		// Invertir velocidad horizontal
+		b.vx = -b.vx;
+
+		// Variación en Y según posición de impacto
 		const hitPos = (b.y - p.y) / p.height;
 		b.vy += (hitPos - 0.5) * 200;
+
+		// Aumentar ligeramente la velocidad y normalizar el vector
+		let speed = Math.hypot(b.vx, b.vy);
+		const maxSpeed = 900;
+		const speedUp = 1.06; // 6% por rebote
+		speed = Math.min(speed * speedUp, maxSpeed);
+		const angle = Math.atan2(b.vy, b.vx);
+		b.vx = Math.cos(angle) * speed;
+		b.vy = Math.sin(angle) * speed;
 	}
 }
 
