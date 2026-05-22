@@ -16,20 +16,25 @@ const gameState = {
 		x: 24,
 		y: 0,
 		width: 12,
-		height: 90
+		height: Math.random() * 30 + 60,
+		normalHeight: null
 	},
 	rightPaddle: {
 		x: 0,
 		y: 0,
 		width: 12,
-		height: 90
+		height: Math.random() * 30 + 60,
+		normalHeight: null
 	},
 	ball: {
 		x: 0,
 		y: 0,
 		radius: 8,
 		vx: 0,
-		vy: 0
+		vy: 0,
+		scarlet: false,
+		scarletTimer: 0,
+		rebounds: 0
 	}
 };
 
@@ -45,11 +50,16 @@ function initializeScene() {
 		return;
 	}
 
+	gameState.leftPaddle.normalHeight = gameState.leftPaddle.height;
+	gameState.rightPaddle.normalHeight = gameState.rightPaddle.height;
 	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
 	gameState.rightPaddle.x = canvas.width - 36;
 	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
 	gameState.ball.x = canvas.width / 2;
 	gameState.ball.y = canvas.height / 2;
+	gameState.ball.scarlet = false;
+	gameState.ball.scarletTimer = 0;
+	gameState.ball.rebounds = 0;
 
 	// Velocidad inicial de la pelota en px/s (aleatoria hacia izquierda o derecha)
 	const speed = 220;
@@ -69,6 +79,40 @@ function resetRound(direction) {
 
 	// Aumentar contador de rondas
 	gameState.rounds += 1;
+}
+
+function startGame() {
+	if (!canvas || gameState.isRunning) {
+		return;
+	}
+
+	gameState.isRunning = true;
+	gameState.paused = false;
+	gameState.lastTime = performance.now();
+	requestAnimationFrame(gameLoop);
+}
+
+function resetGame() {
+	// Limpiar estado completo
+	gameState.isRunning = false;
+	gameState.gameOver = false;
+	gameState.winner = null;
+	gameState.paused = false;
+	gameState.rounds = 1;
+	gameState.scoreLeft = 0;
+	gameState.scoreRight = 0;
+	gameState.lastScorer = null;
+
+	// Reiniciar posiciones
+	gameState.leftPaddle.y = canvas.height / 2 - gameState.leftPaddle.height / 2;
+	gameState.rightPaddle.y = canvas.height / 2 - gameState.rightPaddle.height / 2;
+	gameState.ball.x = canvas.width / 2;
+	gameState.ball.y = canvas.height / 2;
+	const speed = 220;
+	const angle = (Math.random() * 0.6 - 0.3);
+	const dir = Math.random() > 0.5 ? 1 : -1;
+	gameState.ball.vx = dir * speed;
+	gameState.ball.vy = speed * Math.sin(angle);
 }
 
 function startGame() {
@@ -178,6 +222,10 @@ function draw() {
 		return;
 	}
 
+	// Actualizar botón según estado
+	if (startBtn) {
+		startBtn.textContent = gameState.gameOver ? 'Reiniciar Partida' : 'Iniciar Juego';
+	}
 
 	ctx.fillStyle = '#111827';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -312,7 +360,16 @@ function gameLoop(currentTime) {
 }
 
 if (startBtn) {
-	startBtn.addEventListener('click', startGame);
+	startBtn.addEventListener('click', () => {
+		if (gameState.gameOver) {
+			// Si la partida terminó, reiniciar y empezar de nuevo
+			resetGame();
+			startGame();
+		} else {
+			// Si no está corriendo, iniciar normalmente
+			startGame();
+		}
+	});
 }
 
 initializeScene();
