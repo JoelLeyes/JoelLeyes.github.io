@@ -93,6 +93,7 @@ function updateScarlet(deltaTime) {
 	if (gameState.ball.scarletTimer <= 0) {
 		gameState.ball.scarlet = false;
 		gameState.ball.scarletTimer = 0;
+		gameState.ball.rebounds = 0; // Resetear rebotes cuando termina Scarlet Time
 	}
 }
 
@@ -373,12 +374,14 @@ function checkPaddleCollision(paddle) {
 
 	// Si la distancia es menor que el radio, hay colisión
 	if (dist < b.radius) {
-		// Contar rebotes
-		b.rebounds += 1;
+		// Contar rebotes solo si NO está en Scarlet Time
+		if (!b.scarlet) {
+			b.rebounds += 1;
 
-		// Activar Tiempo Escarlata cuando se alcanza el threshold
-		if (b.rebounds >= gameState.scarletThreshold && !b.scarlet) {
-			triggerScarlet();
+			// Activar Tiempo Escarlata cuando se alcanza el threshold
+			if (b.rebounds >= gameState.scarletThreshold) {
+				triggerScarlet();
+			}
 		}
 
 		// Asegurar que la pelota quede fuera de la paleta (evitar pegado)
