@@ -9,6 +9,7 @@ const gameState = {
 	lastScorer: null,
 	scoreLeft: 0,
 	scoreRight: 0,
+	paused: false,
 	leftPaddle: {
 		x: 24,
 		y: 0,
@@ -74,8 +75,29 @@ function startGame() {
 	}
 
 	gameState.isRunning = true;
+	gameState.paused = false;
 	gameState.lastTime = performance.now();
 	requestAnimationFrame(gameLoop);
+}
+
+function pauseGame() {
+	gameState.paused = true;
+}
+
+function resumeGame() {
+	if (!gameState.isRunning) return;
+	gameState.paused = false;
+	// reset lastTime to avoid big delta
+	gameState.lastTime = performance.now();
+}
+
+function togglePause() {
+	if (!gameState.isRunning) return;
+	gameState.paused = !gameState.paused;
+	if (!gameState.paused) {
+		// when resuming, avoid jump in time
+		gameState.lastTime = performance.now();
+	}
 }
 
 function update(deltaTime) {
@@ -192,6 +214,18 @@ function draw() {
 		ctx.font = '14px Arial';
 		ctx.fillText(`Último punto: ${gameState.lastScorer}`, canvas.width / 2, 92);
 	}
+
+	// Overlay de pausa
+	if (gameState.paused) {
+		ctx.fillStyle = 'rgba(0,0,0,0.5)';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = '#ffffff';
+		ctx.font = 'bold 36px Arial';
+		ctx.textAlign = 'center';
+		ctx.fillText('PAUSA', canvas.width / 2, canvas.height / 2 - 10);
+		ctx.font = '16px Arial';
+		ctx.fillText('Pulsa P para reanudar', canvas.width / 2, canvas.height / 2 + 24);
+	}
 }
 
 function checkPaddleCollision(paddle) {
@@ -242,7 +276,9 @@ function gameLoop(currentTime) {
 	const deltaTime = (currentTime - gameState.lastTime) / 1000;
 	gameState.lastTime = currentTime;
 
-	update(deltaTime);
+	if (!gameState.paused) {
+		update(deltaTime);
+	}
 	draw();
 	requestAnimationFrame(gameLoop);
 }
@@ -271,6 +307,11 @@ window.addEventListener('keydown', (e) => {
 			break;
 		case 'ArrowDown':
 			input.down2 = true;
+			break;
+		case 'p':
+		case 'P':
+			// Pausa / Reanuda
+			togglePause();
 			break;
 	}
 });
