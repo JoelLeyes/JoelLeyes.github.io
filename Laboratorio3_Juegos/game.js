@@ -73,7 +73,7 @@ function initializeScene() {
 
 function triggerScarlet() {
 	gameState.ball.scarlet = true;
-	gameState.ball.scarletTimer = 8; // dura 8 segundos
+	gameState.ball.scarletTimer = 6; // dura 6 segundos
 	gameState.ball.rebounds = 0;
 
 	// Aumentar velocidad de golpe al activar Scarlet Time (1.5x)
