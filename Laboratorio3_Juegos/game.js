@@ -112,6 +112,10 @@ function update(deltaTime) {
 	// Limitar paletas dentro del canvas
 	gameState.leftPaddle.y = Math.max(0, Math.min(gameState.leftPaddle.y, canvas.height - gameState.leftPaddle.height));
 	gameState.rightPaddle.y = Math.max(0, Math.min(gameState.rightPaddle.y, canvas.height - gameState.rightPaddle.height));
+
+	// Detectar colisiones pelota-paletas
+	checkPaddleCollision(gameState.leftPaddle);
+	checkPaddleCollision(gameState.rightPaddle);
 }
 
 function draw() {
@@ -149,6 +153,30 @@ function draw() {
 	ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
 	ctx.fillStyle = '#f8fafc';
 	ctx.fill();
+}
+
+function checkPaddleCollision(paddle) {
+	const b = gameState.ball;
+	const p = paddle;
+
+	// Encontrar punto más cercano del rectángulo al círculo
+	const closestX = Math.max(p.x, Math.min(b.x, p.x + p.width));
+	const closestY = Math.max(p.y, Math.min(b.y, p.y + p.height));
+
+	// Distancia entre punto más cercano y centro del círculo
+	const dx = b.x - closestX;
+	const dy = b.y - closestY;
+	const dist = Math.sqrt(dx * dx + dy * dy);
+
+	// Si la distancia es menor que el radio, hay colisión
+	if (dist < b.radius) {
+		// Invertir velocidad horizontal y asegurar que la pelota no se queda pegada
+		b.vx *= -1;
+
+		// Pequeña variación en Y según dónde pegue en la paleta
+		const hitPos = (b.y - p.y) / p.height;
+		b.vy += (hitPos - 0.5) * 200;
+	}
 }
 
 function gameLoop(currentTime) {
