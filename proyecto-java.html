@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frontend JavaEE – Joel Leyes</title>
+    <title>Chat Empresarial JavaEE – Joel Leyes</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -11,28 +11,56 @@
 
     <header>
         <h1><a href="index.html" style="color: inherit; text-decoration: none;">← Joel Leyes</a></h1>
-        <p class="subtitulo">Frontend JavaEE — Java | Servlets | Nginx | Docker</p>
+        <p class="subtitulo">Chat Empresarial JavaEE — Java | Servlets | Nginx | Docker | AWS</p>
     </header>
 
     <section class="proyecto">
-        <h2>Frontend JavaEE — Nginx + HTML5 + CSS + JS (Integración con backend Java)</h2>
+        <h2>Chat Empresarial JavaEE — Plataforma de mensajería interna para equipos</h2>
         <p class="descripcion">
-            Interfaz de usuario para el proyecto JavaEE: páginas estáticas y templates servidos por Nginx
-            que consumen APIs REST del backend Java. Implementa login, chat básico, panel de administración
-            y estilos responsivos. El frontend está preparado para ser desplegado como contenedor Docker
-            junto con el backend en un entorno orquestado (Kubernetes / Docker Compose).
+            Solución web de mensajería interna orientada a empresas, diseñada para centralizar conversaciones,
+            acelerar la coordinación entre equipos y dejar trazabilidad operativa. El proyecto integra un backend
+            Java EE con arquitectura en capas, frontend servido por Nginx y despliegue contenerizado en AWS.
+            Incluye autenticación, chats privados y grupales, reacciones, estado de escritura, notificaciones y
+            un panel de administración, con foco en rendimiento, mantenibilidad y facilidad de despliegue.
         </p>
 
-        <h3>Contenido</h3>
+        <h3>Qué resuelve</h3>
+        <p>
+            Está pensado como un chat corporativo para organizaciones que necesitan comunicación interna segura,
+            ordenada y extensible. La propuesta combina experiencia de usuario simple con una base técnica sólida:
+            separación entre capa web, servicios y acceso a datos, además de un flujo de despliegue automatizable.
+        </p>
+
+        <h3>Arquitectura y alcance</h3>
         <ul>
-            <li><strong>Archivos principales:</strong> `index.html`, `admin.html`, `login.html`, `styles.css`, `theme.js`</li>
-            <li><strong>Servidor recomendado:</strong> Nginx para servir estáticos y proxy a backend Java</li>
-            <li><strong>Contenerización:</strong> `Dockerfile` incluido para build y despliegue rápido</li>
+            <li><strong>Backend:</strong> Java EE con Servlets, capa DAO, capa Service y modelos de dominio</li>
+            <li><strong>Frontend:</strong> HTML, CSS y JavaScript servidos por Nginx</li>
+            <li><strong>Mensajería:</strong> chats privados, grupos, historial de mensajes, reacciones y typing indicator</li>
+            <li><strong>Operación:</strong> notificaciones por email y push para eventos relevantes</li>
+            <li><strong>Despliegue:</strong> imágenes en ECR, ejecución en EC2 y actualización con GitHub Actions</li>
+        </ul>
+
+        <h3>Habilidades demostradas</h3>
+        <ul>
+            <li><strong>Arquitectura en capas:</strong> separación clara entre DAO, Service, Servlet y modelos</li>
+            <li><strong>Diseño de dominio:</strong> entidades para usuarios, chats, mensajes, reacciones, estados y roles</li>
+            <li><strong>Experiencia de producto:</strong> panel de administración, login, conversaciones y feedback en tiempo real</li>
+            <li><strong>Automatización:</strong> contenedorización con Docker y despliegue repetible en AWS</li>
+            <li><strong>Operación cloud:</strong> ECR, EC2, SG, SSH y actualización remota por pipeline</li>
+        </ul>
+
+        <h3>Tecnologías y servicios</h3>
+        <ul>
+            <li><strong>Backend:</strong> Java EE, Servlets, patrón DAO/Service, autenticación y control de sesiones</li>
+            <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript, Nginx</li>
+            <li><strong>DevOps:</strong> Docker, Docker Compose, GitHub Actions</li>
+            <li><strong>AWS:</strong> ECR, EC2, Security Groups, despliegue remoto por SSH</li>
+            <li><strong>Integraciones:</strong> email, notificaciones push, chat grupal e indicadores de actividad</li>
         </ul>
 
         <h3>Enlaces</h3>
         <ul>
-            <li><a href="../JAVA/Frontend_Proyecto_JavaEE/index.html">Abrir frontend local (carpeta `JAVA/Frontend_Proyecto_JavaEE`)</a></li>
+            <li><a href="../Frontend_Proyecto_JavaEE/index.html">Abrir frontend local (carpeta FRONTEND del proyecto JavaEE)</a></li>
             <li><a href="index.html" class="enlace-proyecto">← Volver al Portafolio</a></li>
         </ul>
 
