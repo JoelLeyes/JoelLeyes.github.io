@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramas de Chat Empresarial JavaEE – Joel Leyes</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .diagrama-container {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .diagrama-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="../index.html" style="color: inherit; text-decoration: none;">← Joel Leyes</a></h1>
+        <p class="subtitulo">Diagramas de Chat Empresarial JavaEE</p>
+    </header>
+
+    <section class="proyecto">
+        <h2>Diagramas de Arquitectura – Chat Empresarial JavaEE</h2>
+        <p class="descripcion">
+            Visualización completa de la arquitectura de infraestructura en AWS, topología de red, flujo de despliegue con GitHub Actions 
+            y componentes técnicos del sistema de mensajería empresarial.
+        </p>
+
+        <h3>Arquitectura de Infraestructura</h3>
+        <p>
+            Diagrama general de la solución mostrando los servicios de AWS: EC2 con Docker Compose, 
+            Nginx como reverse proxy SSL, Frontend y Backend Java EE comunicándose, RDS PostgreSQL para base de datos privada, 
+            certificado HTTPS de ZeroSSL, y deployment automático desde GitHub Actions.
+        </p>
+        <div class="diagrama-container">
+            <img src="img/Infraestructura.png" alt="Arquitectura de Infraestructura">
+        </div>
+
+        <h3>Topología de Red (VPC y Security Groups)</h3>
+        <p>
+            Estructura de red en AWS mostrando la VPC, subnets, Security Groups, reglas de ingreso/egreso 
+            (puertos 80, 443, 5432 y SSH temporal), y cómo se comunican EC2 y RDS de forma segura.
+        </p>
+        <div class="diagrama-container">
+            <img src="img/RedSeguridad.png" alt="Topología de Red y Security Groups">
+        </div>
+
+        <h3>Componentes Internos (Backend Java EE)</h3>
+        <p>
+            Arquitectura en capas del backend mostrando Servlets, Capa Service con lógica de negocio, 
+            DAOs para acceso a datos, modelos de dominio, y persistencia en PostgreSQL con servicios de email y notificaciones.
+        </p>
+        <div class="diagrama-container">
+            <img src="img/BackendJava.png" alt="Arquitectura Backend Java EE">
+        </div>
+
+        <h3>Flujo de Despliegue (GitHub Actions → Docker → AWS)</h3>
+        <p>
+            Pipeline CI/CD automatizado: desarrollador pushea código → GitHub Actions ejecuta build y tests → 
+            crea imagen Docker → sube a AWS ECR → EC2 descarga y reinicia Nginx con el nuevo backend.
+        </p>
+        <div class="diagrama-container">
+            <img src="img/PipelineCICD.png" alt="Pipeline CI/CD">
+        </div>
+
+        <h3>Notas sobre los Diagramas</h3>
+        <ul>
+            <li>Todos los diagramas representan el estado actual de la arquitectura en producción.</li>
+            <li>La infraestructura está desplegada en AWS región us-east-1 con certificado HTTPS de ZeroSSL.</li>
+            <li>El pipeline CI/CD está configurado para despliegue automático en cada push a GitHub.</li>
+            <li>Los datos sensibles están en subnets privadas y no son accesibles directamente desde internet.</li>
+        </ul>
+
+        <p style="margin-top: 40px; text-align: center;">
+            <a href="proyecto-java.html" class="enlace-proyecto">← Volver al proyecto</a>
+        </p>
+
+    </section>
+
+    <footer>
+        <p>© 2025 Joel Leyes – Portafolio Profesional</p>
+    </footer>
+
+</body>
+</html>
