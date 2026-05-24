@@ -83,7 +83,8 @@ h3 {
     font-size: 1rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     word-break: break-word;
 }
 
@@ -195,5 +196,6 @@ footer {
 
     .links-proyectos {
         gap: 12px;
+        align-items: stretch;
     }
 }
