@@ -25,7 +25,24 @@
             integración de múltiples orígenes de datos (SQL + NoSQL) y hardening de entrypoint para migraciones idempotentes.
         </p>
 
-        <h3>Arquitectura</h3>
+        <h3>Repositorios del Proyecto</h3>
+        <ul>
+            <li><a href="https://github.com/JoelLeyes/Backend_Proyecto_PHP/" target="_blank">Backend (Laravel + MongoDB Logging)</a></li>
+            <li><a href="https://github.com/JoelLeyes/Frontend_Proyecto_PHP/" target="_blank">Frontend (Vue 3 + Vite)</a></li>
+            <li><a href="https://github.com/JoelLeyes/Notificaciones_Proyecto_PHP" target="_blank">Notificaciones (servicio auxiliar)</a></li>
+            <li><a href="https://app.agendaonline.cloud-ip.cc" target="_blank">Demo en Vivo</a></li>
+        </ul>
+
+        <h3>Índice</h3>
+        <ul class="indice-proyecto">
+            <li><a href="#arquitectura">Arquitectura</a></li>
+            <li><a href="#tecnologias-servicios">Tecnologías y Servicios</a></li>
+            <li><a href="#caracteristicas-destacadas">Características Técnicas Destacadas</a></li>
+            <li><a href="#desafios-resueltos">Desafíos Resueltos</a></li>
+            <li><a href="#resumen-tecnico">Resumen Técnico</a></li>
+        </ul>
+
+        <h3 id="arquitectura">Arquitectura</h3>
         <p>
             Backend Laravel expuesto vía Network Load Balancer (NLB) → API Gateway con dominio personalizado. 
             Frontend Vue 3 (Vite) desplegado en S3 + CloudFront con certificado ACM. Ambos se conectan a RDS PostgreSQL 
@@ -36,7 +53,7 @@
             deployments con Secrets para credenciales de Atlas.
         </p>
 
-        <h3>Tecnologías y Servicios</h3>
+        <h3 id="tecnologias-servicios">Tecnologías y Servicios</h3>
         <ul>
             <li><strong>Compute & Orquestación:</strong> Amazon EKS, ECR, EC2</li>
             <li><strong>Networking:</strong> NLB, API Gateway, VPC, CloudFront (frontend), Security Groups</li>
@@ -51,15 +68,7 @@
             <li><strong>Herramientas:</strong> mongosh (CLI MongoDB), kubectl, docker-cli, PowerShell scripts</li>
         </ul>
 
-        <h3>Repositorios del Proyecto</h3>
-        <ul>
-            <li><a href="https://github.com/JoelLeyes/Backend_Proyecto_PHP/" target="_blank">Backend (Laravel + MongoDB Logging)</a></li>
-            <li><a href="https://github.com/JoelLeyes/Frontend_Proyecto_PHP/" target="_blank">Frontend (Vue 3 + Vite)</a></li>
-            <li><a href="https://github.com/JoelLeyes/Notificaciones_Proyecto_PHP" target="_blank">Notificaciones (servicio auxiliar)</a></li>
-            <li><a href="https://app.agendaonline.cloud-ip.cc" target="_blank">Demo en Vivo</a></li>
-        </ul>
-
-        <h3>Características Técnicas Destacadas</h3>
+        <h3 id="caracteristicas-destacadas">Características Técnicas Destacadas</h3>
         <ul>
             <li><strong>Logging Centralizado en Atlas:</strong> PHP MongoDB Client directo a Atlas sin intermediarios; captura de login (exitosos/fallidos) vía middleware; excepciones globales capturadas automáticamente</li>
             <li><strong>Trazabilidad Completa:</strong> Cada log incluye IP, user-agent, email, ruta, método HTTP, timestamp ISO8601 y contexto custom (user_id, rol, motivo de error)</li>
@@ -71,7 +80,7 @@
             <li><strong>Multi-origen de Datos:</strong> Misma app consulta RDS (Eloquent) y MongoDB (AtlasLogService), manteniendo separación de concerns (app data ≠ logs)</li>
         </ul>
 
-        <h3>Desafíos Resueltos</h3>
+        <h3 id="desafios-resueltos">Desafíos Resueltos</h3>
         <ul>
             <li><strong>TLS/HTTPS Failing en Contenedor:</strong> Agregó ca-certificates + pecl install mongodb; actualización de CA en Dockerfile</li>
             <li><strong>Network Access Rejection en Atlas:</strong> Identificó EKS egress IP (3.92.26.213), configuró allowlist (hoy 0.0.0.0/0 para desarrollo, recomendación: NAT Gateway + Elastic IP)</li>
@@ -80,7 +89,7 @@
             <li><strong>Compatibilidad MongoDB en CI/CD:</strong> GitHub Actions no tenía ext-mongodb por defecto; agregó --ignore-platform-req en Composer para tests</li>
         </ul>
 
-        <h3>Resumen Técnico</h3>
+        <h3 id="resumen-tecnico">Resumen Técnico</h3>
         <p>
             Sistema de marketplace SaaS con logging en tiempo real en MongoDB Atlas, combinando la robustez de RDS PostgreSQL 
             (datos operacionales) con la flexibilidad de MongoDB (logs y eventos). Cada intento de login y excepción no controlada 

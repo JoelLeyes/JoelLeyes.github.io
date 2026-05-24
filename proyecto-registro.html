@@ -24,7 +24,24 @@
             con pruebas de seguridad automatizadas.
         </p>
 
-        <h3>Arquitectura</h3>
+        <h3>Repositorios del Proyecto</h3>
+        <ul>
+            <li><a href="https://github.com/JoelLeyes/BackEnd-proyecto_registro_usuarios" target="_blank">Backend (Django + RDS PostgreSQL)</a></li>
+            <li><a href="https://github.com/JoelLeyes/FrontEnd-proyecto_registro_usuarios" target="_blank">Frontend (Nginx + Static)</a></li>
+            <li><a href="https://github.com/JoelLeyes/Notificaciones-proyecto_registro_usuarios" target="_blank">Microservicio de Notificaciones (Flask)</a></li>
+        </ul>
+
+        <h3>Índice</h3>
+        <ul class="indice-proyecto">
+            <li><a href="#arquitectura">Arquitectura</a></li>
+            <li><a href="#diagrama-arquitectura">Diagrama de Arquitectura</a></li>
+            <li><a href="#diagrama-red">Diagrama de Red</a></li>
+            <li><a href="#tecnologias-servicios-aws">Tecnologías y Servicios AWS</a></li>
+            <li><a href="#caracteristicas-destacadas">Características Técnicas Destacadas</a></li>
+            <li><a href="#resumen-tecnico">Resumen Técnico</a></li>
+        </ul>
+
+        <h3 id="arquitectura">Arquitectura</h3>
         <p>
             El sistema está compuesto por tres microservicios dockerizados: un backend Django (API REST), 
             un microservicio Flask para notificaciones y un frontend estático con Nginx. Todos los 
@@ -35,13 +52,13 @@
             Network Load Balancer (NLB) consumido por API Gateway con dominio personalizado.
         </p>
 
-        <h3>Diagrama de Arquitectura</h3>
+        <h3 id="diagrama-arquitectura">Diagrama de Arquitectura</h3>
         <img src="img/arquitectura.png" alt="Diagrama de Arquitectura de Microservicios" class="imagen-ejemplo">
 
-        <h3>Diagrama de Red</h3>
+        <h3 id="diagrama-red">Diagrama de Red</h3>
         <img src="img/red.png" alt="Diagrama de Red AWS VPC" class="imagen-ejemplo">
 
-        <h3>Tecnologías y Servicios AWS</h3>
+        <h3 id="tecnologias-servicios-aws">Tecnologías y Servicios AWS</h3>
         <ul>
             <li><strong>Compute & Orquestación:</strong> Amazon EKS (Kubernetes), EC2 (nodos), ECR (registro de imágenes)</li>
             <li><strong>Networking:</strong> Application Load Balancer (ALB), Network Load Balancer (NLB), API Gateway, VPC, Security Groups</li>
@@ -54,14 +71,7 @@
             <li><strong>Seguridad SSDLC:</strong> Bandit (SAST), pip-audit (SCA), Grype, AWS ECR scan, OWASP ZAP (DAST)</li>
         </ul>
 
-        <h3>Repositorios del Proyecto</h3>
-        <ul>
-            <li><a href="https://github.com/JoelLeyes/BackEnd-proyecto_registro_usuarios" target="_blank">Backend (Django + RDS PostgreSQL)</a></li>
-            <li><a href="https://github.com/JoelLeyes/FrontEnd-proyecto_registro_usuarios" target="_blank">Frontend (Nginx + Static)</a></li>
-            <li><a href="https://github.com/JoelLeyes/Notificaciones-proyecto_registro_usuarios" target="_blank">Microservicio de Notificaciones (Flask)</a></li>
-        </ul>
-
-        <h3>Características Técnicas Destacadas</h3>
+        <h3 id="caracteristicas-destacadas">Características Técnicas Destacadas</h3>
         <ul>
             <li><strong>Exposición Segura:</strong> Frontend con HTTPS mediante ALB + ACM y redirección automática HTTP→HTTPS (301)</li>
             <li><strong>API Gateway:</strong> Backend expuesto mediante API Gateway con dominio personalizado y certificado ACM</li>
@@ -73,7 +83,7 @@
             <li><strong>Automatización:</strong> Runbook en PowerShell para recuperación del entorno y re-registro de targets en ALB tras reinicios</li>
         </ul>
 
-        <h3>Resumen Técnico</h3>
+        <h3 id="resumen-tecnico">Resumen Técnico</h3>
         <p>
             La solución implementa una API REST para registro de usuarios con RDS PostgreSQL, 
             un sistema de notificaciones independiente y contenedores Docker para cada servicio. 
