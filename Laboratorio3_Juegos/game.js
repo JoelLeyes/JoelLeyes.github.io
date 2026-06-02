@@ -302,7 +302,7 @@ function draw() {
 
 	ctx.beginPath();
 	ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
-	ctx.fillStyle = gameState.ball.scarlet ? '#ff0000' : '#f8fafc';
+	ctx.fillStyle = gameState.ball.scarlet ? '#FF2400' : '#f8fafc';
 	ctx.fill();
 
 	// Marcador
@@ -325,7 +325,7 @@ function draw() {
 
 	// Indicador de Tiempo Escarlata
 	if (gameState.ball.scarlet) {
-		ctx.fillStyle = '#ff0000';
+		ctx.fillStyle = '#FF2400';
 		ctx.font = 'bold 18px Arial';
 		ctx.fillText('TIEMPO ESCARLATA ⚡', canvas.width / 2, canvas.height - 15);
 		ctx.font = '12px Arial';
