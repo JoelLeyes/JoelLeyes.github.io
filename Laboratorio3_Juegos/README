@@ -1,16 +1,64 @@
-Estructura base
+# Laboratorio 3 - Juego de dos jugadores
 
-gameState: objeto central con el estado del juego 
-(running, tiempo, paletas, pelota).
+Este laboratorio es un juego tipo Pong hecho con JavaScript y canvas. La idea es simple: cada jugador controla una paleta, la pelota rebota, se suman puntos cuando alguien falla y aparece un modo especial llamado Tiempo Escarlata cuando se cumplen ciertos rebotes.
 
-initializeScene: coloca paletas y pelota en su posicion inicial.
-startGame: inicia el juego y dispara el loop.
-update: actualiza la logica del estado del juego por frame.
-draw: dibuja el estado actual en canvas.
+## Que hay en el proyecto
 
-gameLoop: orquesta cada frame 
-(calcula tiempo, llama update y draw, y vuelve a ejecutarse).
+- `index.html`: arma la pantalla del juego y el boton para iniciar o reiniciar.
+- `styles.css`: define el aspecto general de la pagina y del canvas.
+- `game.js`: contiene toda la logica del juego.
 
-Flujo:
-initializeScene -> draw -> click en boton -> startGame -> 
-gameLoop -> update + draw -> gameLoop...
+## Estructura de la logica
+
+`gameState` es el objeto que guarda casi todo lo importante: si el juego esta corriendo, el puntaje, la ronda actual, el estado de pausa, la pelota, las paletas y el estado de Tiempo Escarlata.
+
+## Flujo general
+
+1. `initializeScene()` deja las paletas y la pelota listas en su posicion inicial.
+2. `draw()` pinta la escena base para que se vea el tablero apenas carga.
+3. Al hacer click en el boton, `startGame()` activa la partida y arranca el ciclo principal.
+4. `gameLoop()` calcula el tiempo entre frames, llama a `update()` y despues a `draw()`.
+5. `update()` mueve la pelota, mueve las paletas, revisa colisiones y suma puntos.
+6. `draw()` vuelve a dibujar todo con el estado nuevo.
+7. Ese ciclo se repite hasta que alguien llega a 10 puntos.
+
+## Que hace cada funcion
+
+- `initializeScene()`: prepara la primera posicion de la pelota y las paletas, y genera el umbral aleatorio de Escarlata entre 5 y 9 rebotes.
+- `triggerScarlet()`: activa el modo Escarlata durante 6 segundos y aumenta la velocidad de la pelota.
+- `updateScarlet(deltaTime)`: baja el temporizador de Escarlata y lo apaga cuando termina.
+- `resetRound(direction)`: reinicia una jugada despues de un punto, centra la pelota, reacomoda las paletas y prepara una nueva ronda.
+- `startGame()`: enciende el juego y lanza el primer frame del loop.
+- `resetGame()`: limpia toda la partida cuando termina un match y devuelve todo al estado inicial.
+- `pauseGame()`: deja el juego en pausa.
+- `resumeGame()`: reanuda una partida pausada sin que el movimiento pegue un salto raro.
+- `togglePause()`: alterna entre pausa y reanudar con la tecla `P`.
+- `update(deltaTime)`: es el centro de la logica. Mueve la pelota, revisa los bordes, suma puntos, mueve las paletas y llama a la deteccion de choque.
+- `draw()`: dibuja el fondo, la linea central, las paletas, la pelota, el marcador y los mensajes de estado.
+- `checkPaddleCollision(paddle)`: detecta si la pelota toca una paleta, ajusta el rebote, cambia la velocidad y, si corresponde, activa Escarlata.
+- `gameLoop(currentTime)`: controla el ritmo del juego frame a frame.
+
+## Tiempo Escarlata
+
+El modo Escarlata aparece cuando la pelota alcanza un numero aleatorio de rebotes entre 5 y 9. Cuando entra en ese estado:
+
+- la pelota cambia a `#FF2400`;
+- el texto de aviso aparece abajo del canvas;
+- la pelota acelera;
+- las paletas se achican un poco para que el momento se sienta distinto;
+- al terminar, el contador se reinicia y se genera otro umbral nuevo.
+
+## Controles
+
+- Jugador 1: `W` y `S`
+- Jugador 2: `Flecha arriba` y `Flecha abajo`
+- `P`: pausar o reanudar
+- Boton principal: iniciar la partida o reiniciarla si ya termino
+
+## Regla de la partida
+
+El primer jugador que llega a 10 puntos gana. Cuando eso pasa, el juego muestra el ganador y el boton cambia a reinicio.
+
+## Idea del flujo rapido
+
+`initializeScene()` -> `draw()` -> click en boton -> `startGame()` -> `gameLoop()` -> `update()` + `draw()` -> repetir hasta que alguien gane.
