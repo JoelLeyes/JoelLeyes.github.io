@@ -3,26 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagramas de AgendaOnline – Joel Leyes</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Diagramas de AgendaOnline | Software, Infra y Deployment</title>
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
-<body>
+<body class="pagina-diagramas">
 
     <header>
         <h1><a href="index.html" style="color: inherit; text-decoration: none;">← Joel Leyes</a></h1>
-        <p class="subtitulo">Diagramas de AgendaOnline</p>
+        <p class="subtitulo">Software, infraestructura y despliegue del proyecto</p>
     </header>
 
     <section class="proyecto">
-        <h2>Diagramas de AgendaOnline</h2>
-        <p class="descripcion">
-            Esta sección queda preparada para publicar los diagramas del proyecto cuando estén disponibles.
+        <div class="diagramas-portada">
+            <p class="diagramas-etiqueta">AgendaOnline</p>
+            <h2>Arquitectura visual del sistema</h2>
+            <p class="descripcion">
+                Ordenados como pediste: primero el diagrama de software, luego el de infraestructura y al final el de deployment.
+                La idea es que se lea de forma clara y se vea prolijo tanto en escritorio como en celular.
+            </p>
+        </div>
+
+        <div class="galeria-diagramas">
+            <figure class="diagrama-card diagrama-card-software">
+                <div class="diagrama-cabecera">
+                    <span class="diagrama-numero">01</span>
+                    <div>
+                        <h3>Diagrama de software</h3>
+                        <p>Capas de la SPA, el backend, los servicios y la comunicación en tiempo real.</p>
+                    </div>
+                </div>
+                <img class="diagrama-imagen" src="../Diagramas/SOFTWARE.png" alt="Diagrama de software de AgendaOnline">
+            </figure>
+
+            <figure class="diagrama-card diagrama-card-infra">
+                <div class="diagrama-cabecera">
+                    <span class="diagrama-numero">02</span>
+                    <div>
+                        <h3>Diagrama de infraestructura</h3>
+                        <p>Entrada por ALB, nodos EKS, Ingress NGINX y servicios internos de la plataforma.</p>
+                    </div>
+                </div>
+                <img class="diagrama-imagen" src="../Diagramas/INFRAESTRUCTURA.png" alt="Diagrama de infraestructura de AgendaOnline">
+            </figure>
+
+            <figure class="diagrama-card diagrama-card-deploy">
+                <div class="diagrama-cabecera">
+                    <span class="diagrama-numero">03</span>
+                    <div>
+                        <h3>Diagrama de deployment</h3>
+                        <p>Flujo completo desde GitHub Actions hasta ECR y el redeploy de backend, frontend y notificaciones.</p>
+                    </div>
+                </div>
+                <img class="diagrama-imagen" src="../Diagramas/DEPLOYMENT.png" alt="Diagrama de deployment de AgendaOnline">
+            </figure>
+        </div>
+
+        <p class="diagramas-cierre">
+            Si querés, después también te lo dejo con un índice arriba para saltar a cada diagrama.
         </p>
-        <p>
-            Por ahora no hay diagramas subidos para AgendaOnline.
-        </p>
-        <p style="margin-top: 40px; text-align: center;">
+
+        <p style="margin-top: 34px; text-align: center;">
             <a href="proyecto-agenda.html" class="enlace-proyecto">← Volver al proyecto</a>
         </p>
     </section>
