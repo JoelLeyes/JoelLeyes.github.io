@@ -11,11 +11,11 @@
 
     <header>
         <h1><a href="../index.html" style="color: inherit; text-decoration: none;">← Joel Leyes</a></h1>
-        <p class="subtitulo">Chat Empresarial JavaEE — Java EE | Servlets | Nginx | Docker | AWS ECR | EC2 | RDS PostgreSQL | GitHub Actions</p>
+        <p class="subtitulo">Chat Empresarial JavaEE — Java EE | Servlets | Tomcat | Nginx | Docker | AWS ECR | EC2 | RDS PostgreSQL | MongoDB Atlas | Firebase FCM</p>
     </header>
 
     <section class="proyecto">
-        <h2>Chat Empresarial JavaEE — Java EE | Servlets | Nginx | Docker | AWS ECR | EC2 | RDS PostgreSQL | GitHub Actions</h2>
+        <h2>Chat Empresarial JavaEE — Java EE | Servlets | Tomcat | Nginx | Docker | AWS ECR | EC2 | RDS PostgreSQL | MongoDB Atlas | Firebase FCM</h2>
         <p class="descripcion">
             Solución web de mensajería interna orientada a empresas, diseñada para centralizar conversaciones,
             acelerar la coordinación entre equipos y dejar trazabilidad operativa. El proyecto integra un backend
@@ -50,11 +50,15 @@
 
         <h3 id="arquitectura-alcance">Arquitectura y alcance</h3>
         <ul>
-            <li><strong>Backend:</strong> Java EE con Servlets, capa DAO, capa Service y modelos de dominio</li>
-            <li><strong>Frontend:</strong> HTML, CSS y JavaScript servidos por Nginx</li>
-            <li><strong>Mensajería:</strong> chats privados, grupos, historial de mensajes, reacciones y typing indicator</li>
-            <li><strong>Operación:</strong> notificaciones por email y push para eventos relevantes</li>
-            <li><strong>Despliegue:</strong> imágenes en ECR, ejecución en EC2 y actualización con GitHub Actions</li>
+            <li><strong>Backend:</strong> Java EE con Servlets, JPA/Hibernate para persistencia, capa DAO y capa Service</li>
+            <li><strong>Runtime:</strong> Apache Tomcat 10.x ejecutando el WAR dentro de contenedores Docker</li>
+            <li><strong>Frontend:</strong> HTML, CSS y JavaScript servidos por Nginx (reverse proxy SSL)</li>
+            <li><strong>Mensajería:</strong> chats privados y grupales, historial de mensajes, reacciones y typing indicator (TypingStore en memoria)</li>
+            <li><strong>Notificaciones:</strong> notificaciones por email (SMTP / Gmail) y push mediante Firebase FCM</li>
+            <li><strong>Auditoría y logs:</strong> MongoDB Atlas usado para almacenar logs y auditoría de acciones (MongoAuditService)</li>
+            <li><strong>Almacenamiento de archivos:</strong> almacenamiento local en EC2 (carpeta `uploads`) servido por Nginx y accesible vía `FileDownloadServlet`</li>
+            <li><strong>Seguridad:</strong> autenticación con JWT, CORS global (CorsFilter), HTTPS/TLS con certificado ZeroSSL</li>
+            <li><strong>Despliegue y CI/CD:</strong> GitHub Actions construye imagen Docker, publica en AWS ECR; EC2 descarga y actualiza contenedores</li>
         </ul>
 
         <h3 id="habilidades">Habilidades demostradas</h3>
@@ -64,6 +68,7 @@
             <li><strong>Experiencia de producto:</strong> panel de administración, login, conversaciones y feedback en tiempo real</li>
             <li><strong>Automatización:</strong> contenedorización con Docker y despliegue repetible en AWS</li>
             <li><strong>Operación cloud:</strong> ECR, EC2, SG, SSH y actualización remota por pipeline</li>
+            <li><strong>Integraciones:</strong> MongoDB Atlas para auditoría, Firebase FCM para push y SMTP/Gmail para emails</li>
         </ul>
 
         <h3 id="diagramas">Diagramas</h3>
@@ -76,12 +81,16 @@
 
         <h3 id="tecnologias">Tecnologías y servicios</h3>
         <ul>
-            <li><strong>Backend:</strong> Java EE, Servlets, patrón DAO/Service, autenticación y control de sesiones</li>
-            <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript, Nginx</li>
-            <li><strong>DevOps:</strong> Docker, Docker Compose, GitHub Actions</li>
-            <li><strong>AWS:</strong> ECR, EC2, Security Groups, despliegue remoto por SSH</li>
-            <li><strong>Seguridad:</strong> HTTPS/TLS con certificado ZeroSSL, Nginx como reverse proxy SSL</li>
-            <li><strong>Integraciones:</strong> email, notificaciones push, chat grupal e indicadores de actividad</li>
+            <li><strong>Backend:</strong> Java EE, Servlets, JPA/Hibernate, JWT</li>
+            <li><strong>Servidor de aplicaciones:</strong> Apache Tomcat 10.x</li>
+            <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript, Nginx (reverse proxy y static assets)</li>
+            <li><strong>DevOps:</strong> Docker, Docker Compose, GitHub Actions (build → tests → push a ECR)</li>
+            <li><strong>AWS:</strong> ECR, EC2, Security Groups, RDS PostgreSQL (base relacional principal)</li>
+            <li><strong>Almacenamiento:</strong> almacenamiento local en EC2 (`/uploads`) servido por Nginx</li>
+            <li><strong>Logs / Auditoría:</strong> MongoDB Atlas (registro de auditoría y eventos)</li>
+            <li><strong>Notificaciones:</strong> Firebase FCM (push) y SMTP/Gmail (email) — SMTP en puerto 587 con STARTTLS</li>
+            <li><strong>Seguridad:</strong> HTTPS con ZeroSSL, CORS filter y JWT para protección de endpoints</li>
+            <li><strong>Otras integraciones:</strong> Firebase, FCM, y servicios auxiliares para entrega de notificaciones</li>
         </ul>
 
         <p style="margin-top: 40px; text-align: center;">
