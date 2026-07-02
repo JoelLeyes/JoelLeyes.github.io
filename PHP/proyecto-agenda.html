@@ -3,110 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgendaOnline – Joel Leyes</title>
+    <title>AgendaOnline — Laravel, WebSockets y EKS | Joel Leyes</title>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
-<body>
+<body class="pagina-proyecto-agenda">
 
     <header>
         <h1><a href="/index.html" style="color: inherit; text-decoration: none;">← Joel Leyes</a></h1>
-        <p class="subtitulo">AgendaOnline — Laravel | PHP | MongoDB Atlas | AWS EKS | Kubernetes | RDS PostgreSQL | PWA | GitHub Actions</p>
+        <p class="subtitulo">Laravel 10 | Vue 3 | WebSockets | Redis | EKS | RDS PostgreSQL</p>
     </header>
 
     <section class="proyecto">
-        <h2>AgendaOnline — Laravel | PHP | MongoDB Atlas | AWS EKS | Kubernetes | RDS PostgreSQL | PWA | GitHub Actions</h2>
-        <p class="descripcion">
-            Plataforma completa de marketplace de servicios profesionales desarrollada en Laravel 10 (backend API) 
-            y Vue 3 (frontend), con arquitectura de microservicios en Amazon EKS. Implementa logging centralizado en 
-            MongoDB Atlas para trazabilidad de accesos y errores, integración con PayPal para pagos online, videollamadas 
-            en tiempo real con LiveKit, base de datos relacional en RDS PostgreSQL, y cumplimiento de SSDLC. 
-            El foco técnico incluyó resolver desafíos de conectividad TLS en contenedores, optimización de build Docker, 
-            integración de múltiples orígenes de datos (SQL + NoSQL) y hardening de entrypoint para migraciones idempotentes.
-        </p>
+        <div class="project-hero">
+            <p class="diagramas-etiqueta">AgendaOnline</p>
+            <h2>Marketplace de servicios con tiempo real, colas y despliegue en AWS</h2>
+            <p class="descripcion">
+                Plataforma de servicios profesionales desarrollada con Laravel 10 como backend API y Vue 3 + Vite como SPA.
+                La arquitectura actual corre sobre Amazon EKS con NGINX Ingress y expone frontend, backend, Reverb, notificaciones
+                y queue-worker dentro del namespace <strong>proyecto2026</strong>. La sincronización en vivo se resuelve con
+                WebSockets mediante Reverb + Echo, mientras que Redis sostiene cache y colas.
+            </p>
+            <div class="stack-chips">
+                <span>Laravel 10</span>
+                <span>Vue 3</span>
+                <span>WebSockets</span>
+                <span>Reverb</span>
+                <span>Echo</span>
+                <span>Redis</span>
+                <span>EKS</span>
+                <span>RDS PostgreSQL</span>
+                <span>MongoDB Atlas</span>
+                <span>PayPal</span>
+                <span>LiveKit</span>
+            </div>
+        </div>
+
+        <div class="panel-grid">
+            <article class="info-card">
+                <h3>Qué cubre la app</h3>
+                <ul>
+                    <li>Reservas, perfiles de profesionales y gestión de servicios.</li>
+                    <li>Pago online con PayPal y videollamadas con LiveKit.</li>
+                    <li>Autenticación con Sanctum y panel de administración.</li>
+                </ul>
+            </article>
+            <article class="info-card">
+                <h3>Tiempo real y colas</h3>
+                <ul>
+                    <li>WebSockets con Reverb + Echo para notificaciones y cambios de estado.</li>
+                    <li>Redis como cache, cola de jobs y soporte para el queue-worker.</li>
+                    <li>Microservicio de notificaciones desacoplado para emails y alertas.</li>
+                </ul>
+            </article>
+        </div>
 
         <h3>Repositorios del Proyecto</h3>
-        <ul>
-            <li><a href="https://github.com/JoelLeyes/Backend_Proyecto_PHP/" target="_blank">Backend (Laravel + MongoDB Logging)</a></li>
-            <li><a href="https://github.com/JoelLeyes/Frontend_Proyecto_PHP/" target="_blank">Frontend (Vue 3 + Vite)</a></li>
-            <li><a href="https://github.com/JoelLeyes/Notificaciones_Proyecto_PHP" target="_blank">Notificaciones (servicio auxiliar)</a></li>
+        <ul class="repo-list">
+            <li><a href="https://github.com/JoelLeyes/Backend_Proyecto_PHP/" target="_blank">Backend (Laravel + Realtime + Jobs)</a></li>
+            <li><a href="https://github.com/JoelLeyes/Frontend_Proyecto_PHP/" target="_blank">Frontend (Vue 3 + Vite + Echo)</a></li>
+            <li><a href="https://github.com/JoelLeyes/Notificaciones_Proyecto_PHP" target="_blank">Notificaciones (microservicio de email)</a></li>
             <li><a href="https://app.agendaonline.cloud-ip.cc" target="_blank">Demo en Vivo</a></li>
         </ul>
 
-        <h3>Índice</h3>
-        <ul class="indice-proyecto">
-            <li><a href="#arquitectura">Arquitectura</a></li>
-            <li><a href="#diagramas">Diagramas</a></li>
-            <li><a href="#tecnologias-servicios">Tecnologías y Servicios</a></li>
-            <li><a href="#caracteristicas-destacadas">Características Técnicas Destacadas</a></li>
-            <li><a href="#desafios-resueltos">Desafíos Resueltos</a></li>
-            <li><a href="#resumen-tecnico">Resumen Técnico</a></li>
-        </ul>
-
-        <h3 id="arquitectura">Arquitectura</h3>
+        <h3 id="arquitectura">Arquitectura actual</h3>
         <p>
-            Backend Laravel expuesto vía Network Load Balancer (NLB) → API Gateway con dominio personalizado. 
-            Frontend Vue 3 (Vite) desplegado en S3 + CloudFront con certificado ACM. Ambos se conectan a RDS PostgreSQL 
-            para datos operacionales y a MongoDB Atlas (cluster dedicado en Free Tier) para logging de eventos (conexiones, 
-            errores globales, stack traces). Middleware custom captura intentos de login (exitosos/fallidos) registrándolos 
-            en Atlas con contexto (IP, user-agent, email, timestamp). Exception handler global envía excepciones a Atlas sin 
-            interrumpir el flujo de la app. ECR almacena imágenes, GitHub Actions ejecuta tests + SAST, y kubectl orquesta 
-            deployments con Secrets para credenciales de Atlas.
-        </p>
-
-        <h3 id="diagramas">Diagramas</h3>
-        <p>
-            Los diagramas de arquitectura y red se publicarán en una página aparte para mantener esta vista principal más limpia.
+            El flujo real del sistema es Usuario → ALB → nodos EKS → Ingress NGINX → services internos. El frontend, backend,
+            Reverb, Redis, queue-worker y notificaciones viven dentro del namespace <strong>proyecto2026</strong>. El backend se
+            apoya en RDS PostgreSQL para datos operacionales, MongoDB Atlas para logs, y servicios externos como PayPal, LiveKit
+            y Google OAuth.
         </p>
         <p>
-            <a href="diagramas-agenda.html" target="_blank" class="enlace-proyecto">Abrir diagramas en una nueva pestaña</a>
+            Los diagramas completos de software, infraestructura y deployment están separados para mantener esta página más limpia.
+        </p>
+        <p style="margin-top: 18px; text-align: center;">
+            <a href="diagramas-agenda.html" class="enlace-proyecto">Abrir diagramas del proyecto</a>
         </p>
 
         <h3 id="tecnologias-servicios">Tecnologías y Servicios</h3>
-        <ul>
-            <li><strong>Compute & Orquestación:</strong> Amazon EKS, ECR, EC2</li>
-            <li><strong>Networking:</strong> NLB, API Gateway, VPC, CloudFront (frontend), Security Groups</li>
-            <li><strong>Seguridad:</strong> AWS Certificate Manager (ACM), IAM, Kubernetes Secrets</li>
-            <li><strong>Bases de Datos:</strong> RDS PostgreSQL (aplicación), MongoDB Atlas (logs)</li>
-            <li><strong>Backend:</strong> Laravel 10, Sanctum (auth), Eloquent ORM, REST API</li>
-            <li><strong>Frontend:</strong> Vue 3, Vite, Pinia (state), Axios, CSS módular, PWA (Service Worker)</li>
-            <li><strong>Pagos:</strong> PayPal Checkout SDK integration</li>
-            <li><strong>Videollamadas:</strong> LiveKit (WebRTC real-time)</li>
-            <li><strong>DevOps:</strong> Docker, Kubernetes, GitHub Actions (CI/CD), kubectl, AWS CLI</li>
-            <li><strong>Logging & Observabilidad:</strong> MongoDB PHP Driver, Custom AtlasLogService, middleware de trazabilidad</li>
-            <li><strong>Herramientas:</strong> mongosh (CLI MongoDB), kubectl, docker-cli, PowerShell scripts</li>
-        </ul>
+        <div class="tech-grid">
+            <article class="tech-card">
+                <h4>Backend</h4>
+                <ul>
+                    <li>Laravel 10, REST API y Eloquent ORM.</li>
+                    <li>Sanctum para autenticación y control de sesión.</li>
+                    <li>Jobs, eventos y servicios de dominio separados.</li>
+                </ul>
+            </article>
+            <article class="tech-card">
+                <h4>Frontend</h4>
+                <ul>
+                    <li>Vue 3, Vite y Pinia.</li>
+                    <li>Echo para sincronización UI en vivo.</li>
+                    <li>SPA lista para flujos de reservas y notificaciones.</li>
+                </ul>
+            </article>
+            <article class="tech-card">
+                <h4>Tiempo real</h4>
+                <ul>
+                    <li>Reverb como servidor de WebSockets.</li>
+                    <li>Echo como cliente para canales privados.</li>
+                    <li>Redis y queue-worker para procesos asincrónicos.</li>
+                </ul>
+            </article>
+            <article class="tech-card">
+                <h4>Infraestructura</h4>
+                <ul>
+                    <li>Amazon EKS, ALB, NGINX Ingress y ECR.</li>
+                    <li>Servicios Kubernetes: frontend, backend, reverb, redis y notificaciones.</li>
+                    <li>Despliegue con namespaces y secrets en Kubernetes.</li>
+                </ul>
+            </article>
+            <article class="tech-card">
+                <h4>Datos</h4>
+                <ul>
+                    <li>RDS PostgreSQL para la base principal.</li>
+                    <li>MongoDB Atlas para logs y trazabilidad.</li>
+                    <li>Redis para cache y colas.</li>
+                </ul>
+            </article>
+            <article class="tech-card">
+                <h4>Integraciones</h4>
+                <ul>
+                    <li>PayPal para pagos online.</li>
+                    <li>LiveKit para videollamadas.</li>
+                    <li>Google OAuth para login social.</li>
+                </ul>
+            </article>
+            <article class="tech-card">
+                <h4>DevOps</h4>
+                <ul>
+                    <li>Docker, kubectl y AWS CLI.</li>
+                    <li>GitHub Actions para build, push y redeploy.</li>
+                    <li>Scripts PowerShell para automatizar recuperación y despliegue.</li>
+                </ul>
+            </article>
+            <article class="tech-card">
+                <h4>Observabilidad</h4>
+                <ul>
+                    <li>MongoDB Atlas como registro centralizado.</li>
+                    <li>Trazabilidad de accesos, errores y eventos del sistema.</li>
+                    <li>Separación clara entre datos operacionales y logs.</li>
+                </ul>
+            </article>
+        </div>
 
         <h3 id="caracteristicas-destacadas">Características Técnicas Destacadas</h3>
         <ul>
-            <li><strong>Logging Centralizado en Atlas:</strong> PHP MongoDB Client directo a Atlas sin intermediarios; captura de login (exitosos/fallidos) vía middleware; excepciones globales capturadas automáticamente</li>
-            <li><strong>Trazabilidad Completa:</strong> Cada log incluye IP, user-agent, email, ruta, método HTTP, timestamp ISO8601 y contexto custom (user_id, rol, motivo de error)</li>
-            <li><strong>Build Optimizado:</strong> .dockerignore reduce contexto de 1.59GB → 463KB; GitHub Actions soporta ext-mongodb con --ignore-platform-req</li>
-            <li><strong>Resiliencia de Entrypoint:</strong> APP_KEY desde env si existe; migraciones opt-in (RUN_MIGRATIONS=true/false); sin CrashLoopBackOff en redeploy</li>
-            <li><strong>Gestión de Secrets:</strong> MongoDB URI, DB name, collection en Kubernetes Secrets; imágenes pinneadas por digest; Composer lock con versiones fijas</li>
-            <li><strong>Autenticación Stateless:</strong> Sanctum Bearer tokens; CORS permitido para frontend en CloudFront</li>
-            <li><strong>Validación y Seguridad:</strong> Requests de Laravel, Password hashing, email unique, roles (cliente/profesional/admin)</li>
-            <li><strong>Multi-origen de Datos:</strong> Misma app consulta RDS (Eloquent) y MongoDB (AtlasLogService), manteniendo separación de concerns (app data ≠ logs)</li>
+            <li><strong>Tiempo real con WebSockets:</strong> Reverb + Echo sincronizan reservas, notificaciones y estados de la interfaz sin recargar la página.</li>
+            <li><strong>Notificaciones desacopladas:</strong> El servicio de notificaciones envía emails y alertas desde un microservicio separado.</li>
+            <li><strong>Procesamiento asincrónico:</strong> Redis y queue-worker resuelven jobs, correos y tareas diferidas.</li>
+            <li><strong>Arquitectura en EKS:</strong> ALB, Ingress NGINX y Kubernetes coordinan frontend, backend y servicios auxiliares.</li>
+            <li><strong>Integración multi-servicio:</strong> PayPal, LiveKit y Google OAuth amplían el alcance de la app sin mezclar responsabilidades.</li>
+            <li><strong>Persistencia separada:</strong> PostgreSQL guarda la operación de negocio, mientras MongoDB Atlas conserva logs y trazabilidad.</li>
+            <li><strong>CI/CD repetible:</strong> GitHub Actions construye imágenes Docker, publica en ECR y actualiza el clúster.
+            </li>
         </ul>
 
-        <h3 id="desafios-resueltos">Desafíos Resueltos</h3>
+        <h3 id="despliegue-ci-cd">Despliegue y CI/CD</h3>
         <ul>
-            <li><strong>TLS/HTTPS Failing en Contenedor:</strong> Agregó ca-certificates + pecl install mongodb; actualización de CA en Dockerfile</li>
-            <li><strong>Network Access Rejection en Atlas:</strong> Identificó EKS egress IP (3.92.26.213), configuró allowlist (hoy 0.0.0.0/0 para desarrollo, recomendación: NAT Gateway + Elastic IP)</li>
-            <li><strong>Timeout en Docker Build:</strong> Creó .dockerignore excluyendo vendor, .git, storage/logs; reducción de 1.59GB a 463KB</li>
-            <li><strong>CrashLoopBackOff en Redeploy:</strong> Migraciones redundantes rompían pod; corrigió entrypoint para ser idempotente</li>
-            <li><strong>Compatibilidad MongoDB en CI/CD:</strong> GitHub Actions no tenía ext-mongodb por defecto; agregó --ignore-platform-req en Composer para tests</li>
+            <li>El backend, frontend y notificaciones se empujan como imágenes Docker a ECR.</li>
+            <li>Los workflows actualizan kubeconfig, aplican manifests y reinician deployments en Kubernetes.</li>
+            <li>El tráfico público entra por ALB y se enruta internamente con NGINX Ingress.</li>
+            <li>Redis, Reverb y queue-worker forman la capa de soporte para realtime y procesos diferidos.</li>
+            <li>Los secrets de Kubernetes concentran credenciales de RDS, PayPal, LiveKit, Google y el servicio de notificaciones.</li>
         </ul>
 
         <h3 id="resumen-tecnico">Resumen Técnico</h3>
         <p>
-            Sistema de marketplace SaaS con logging en tiempo real en MongoDB Atlas, combinando la robustez de RDS PostgreSQL 
-            (datos operacionales) con la flexibilidad de MongoDB (logs y eventos). Cada intento de login y excepción no controlada 
-            se registra automáticamente, habilitando debugging rápido y auditoría de accesos. La infraestructura es completamente 
-            dockerizada y orquestada en Kubernetes (EKS), con CI/CD green en GitHub Actions. El desafío de integración multi-cloud 
-            (RDS + MongoDB Atlas) fue resuelto mediante servicios inyectables en Laravel (AtlasLogService) y middleware de bajo acoplamiento. 
-            Propiedad intelectual: arquitectura de logging, manejo de errores graceful, optimización de builds y automatización de 
-            despliegues con redeploy.ps1.
+            AgendaOnline ya no queda descrito como una maqueta genérica: la página resume el stack real del proyecto actual,
+            con WebSockets, Redis, cola de jobs, microservicio de notificaciones y despliegue en AWS EKS. El backend Laravel,
+            el frontend Vue 3 y los servicios auxiliares trabajan coordinados para cubrir reservas, pagos, videollamadas y
+            sincronización en vivo. Si necesitás explicar el proyecto en defensa, esta página ya refleja la arquitectura que
+            efectivamente está corriendo.
         </p>
 
         <p style="margin-top: 40px; text-align: center;">
