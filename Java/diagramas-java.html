@@ -37,41 +37,60 @@
             y componentes técnicos del sistema de mensajería empresarial.
         </p>
 
-        <h3>Arquitectura de Infraestructura</h3>
+        <h3>Diagramas principales</h3>
         <p>
-            Diagrama general de la solución mostrando los servicios de AWS: EC2 con Docker Compose, 
-            Nginx como reverse proxy SSL, Frontend y Backend Java EE comunicándose, RDS PostgreSQL para base de datos privada, 
-            certificado HTTPS de ZeroSSL, y deployment automático desde GitHub Actions.
+            A continuación están los cuatro diagramas principales del proyecto, en el orden recomendado: 
+            visión general, infraestructura, componentes del backend y el pipeline CI/CD.
         </p>
-        <div class="diagrama-container">
-            <img src="img/Infraestructura.png" alt="Arquitectura de Infraestructura">
-        </div>
 
-        <h3>Topología de Red (VPC y Security Groups)</h3>
-        <p>
-            Estructura de red en AWS mostrando la VPC, subnets, Security Groups, reglas de ingreso/egreso 
-            (puertos 80, 443, 5432 y SSH temporal), y cómo se comunican EC2 y RDS de forma segura.
-        </p>
-        <div class="diagrama-container">
-            <img src="img/RedSeguridad.png" alt="Topología de Red y Security Groups">
-        </div>
+        <style>
+            .diagrama-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 24px;
+                align-items: start;
+            }
+            @media (min-width: 900px) {
+                .diagrama-grid { grid-template-columns: 1fr 1fr; }
+            }
+            .diagrama-container {
+                background: transparent;
+                padding: 8px 8px 16px;
+                margin: 8px 0;
+                border-radius: 12px;
+                text-align: center;
+            }
+            .diagrama-container img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 10px;
+                box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+                border: none;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
 
-        <h3>Componentes Internos (Backend Java EE)</h3>
-        <p>
-            Arquitectura en capas del backend mostrando Servlets, Capa Service con lógica de negocio, 
-            DAOs para acceso a datos, modelos de dominio, y persistencia en PostgreSQL con servicios de email y notificaciones.
-        </p>
-        <div class="diagrama-container">
-            <img src="img/BackendJava.png" alt="Arquitectura Backend Java EE">
-        </div>
+        <div class="diagrama-grid">
+            <div class="diagrama-container">
+                <img src="../Diagramas/DiagramasGPT/Arquitectura%20General.png" alt="Arquitectura general">
+                <p style="margin-top:8px; font-size:0.95rem; color: #cfcfcf;">Arquitectura general del sistema y flujo entre componentes.</p>
+            </div>
 
-        <h3>Flujo de Despliegue (GitHub Actions → Docker → AWS)</h3>
-        <p>
-            Pipeline CI/CD automatizado: desarrollador pushea código → GitHub Actions ejecuta build y tests → 
-            crea imagen Docker → sube a AWS ECR → EC2 descarga y reinicia Nginx con el nuevo backend.
-        </p>
-        <div class="diagrama-container">
-            <img src="img/PipelineCICD.png" alt="Pipeline CI/CD">
+            <div class="diagrama-container">
+                <img src="../Diagramas/DiagramasGPT/Infraestructura.png" alt="Infraestructura AWS">
+                <p style="margin-top:8px; font-size:0.95rem; color: #cfcfcf;">Topología e infraestructura desplegada en AWS.</p>
+            </div>
+
+            <div class="diagrama-container">
+                <img src="../Diagramas/DiagramasGPT/Backend.png" alt="Arquitectura Backend Java EE">
+                <p style="margin-top:8px; font-size:0.95rem; color: #cfcfcf;">Componentes internos del backend: servicios, DAOs y persistencia.</p>
+            </div>
+
+            <div class="diagrama-container">
+                <img src="../Diagramas/DiagramasGPT/PipelineCICD.png" alt="Pipeline CI/CD">
+                <p style="margin-top:8px; font-size:0.95rem; color: #cfcfcf;">Flujo de despliegue: GitHub Actions → Docker → AWS ECR → EC2.</p>
+            </div>
         </div>
 
         <h3>Notas sobre los Diagramas</h3>
