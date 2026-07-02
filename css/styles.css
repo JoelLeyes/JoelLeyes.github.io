@@ -235,7 +235,7 @@ body.pagina-diagramas .proyecto {
 
 .diagrama-card {
     margin: 0;
-    padding: 24px;
+    padding: 0;
     border-radius: 24px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 255, 0.98) 100%);
     border: 1px solid rgba(84, 110, 255, 0.12);
@@ -270,7 +270,8 @@ body.pagina-diagramas .proyecto {
     grid-template-columns: auto 1fr;
     gap: 16px;
     align-items: start;
-    margin-bottom: 18px;
+    margin-bottom: 0;
+    padding: 24px 24px 18px;
 }
 
 .diagrama-numero {
@@ -302,9 +303,12 @@ body.pagina-diagramas .proyecto {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 18px;
-    border: 1px solid rgba(84, 110, 255, 0.12);
-    box-shadow: 0 12px 28px rgba(31, 41, 55, 0.08);
+    border-radius: 0 0 24px 24px;
+    border-top: 1px solid rgba(84, 110, 255, 0.12);
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    box-shadow: none;
     background: white;
 }
 
@@ -364,13 +368,13 @@ body.pagina-diagramas .proyecto {
     }
 
     .diagrama-card {
-        padding: 18px;
         border-radius: 18px;
     }
 
     .diagrama-cabecera {
         grid-template-columns: 1fr;
         gap: 10px;
+        padding: 18px 18px 14px;
     }
 
     .diagrama-numero {
@@ -385,5 +389,9 @@ body.pagina-diagramas .proyecto {
 
     .diagrama-cabecera p {
         font-size: 0.96rem;
+    }
+
+    .diagrama-imagen {
+        border-radius: 0 0 18px 18px;
     }
 }
