@@ -4,6 +4,8 @@ Portafolio Profesional | Tecnólogo en Tecnologías de la Información | Cloud &
 ## 📋 Estructura del Portafolio
 
 - **`index.html`** — Página de bienvenida con introducción personal, habilidades y links a proyectos
+- **[`ultimaMilla.html`](ultimaMilla.html)** — Última Milla: proyecto .NET y links de arquitectura
+- **[`NET/infraestructura.html`](NET/infraestructura.html)** — Visor interactivo de infraestructura y despliegue; utiliza los dos SVG de la misma carpeta, sin dependencias externas
 - **`proyecto-registro.html`** — Sistema de Registro de Usuarios (Django + AWS + Microservicios)
 - **`proyecto-agenda.html`** — AgendaOnline (Laravel + MongoDB Atlas + Observabilidad)
 
