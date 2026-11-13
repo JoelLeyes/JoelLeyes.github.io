@@ -9,6 +9,8 @@ Portafolio Profesional | Tecnólogo en Tecnologías de la Información | Cloud &
 - **`proyecto-registro.html`** — Sistema de Registro de Usuarios (Django + AWS + Microservicios)
 - **`proyecto-agenda.html`** — AgendaOnline (Laravel + MongoDB Atlas + Observabilidad)
 
+Los SVG deben conservar `font-family: "Segoe UI", Arial, sans-serif` en su regla raíz `#my-svg`: sus cajas de texto se calcularon con esa tipografía. Si se regeneran, comprobar ambos diagramas como imágenes y como archivos independientes para evitar etiquetas recortadas.
+
 ## 🚀 Proyectos Destacados
 
 ### 📋 [Sistema de Registro de Usuarios en AWS](proyecto-registro.html)

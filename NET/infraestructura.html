@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TallerNet - Infraestructura</title>
+  <title>Ultima Milla - Infraestructura y despliegue</title>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; background: #e2e8f0; color: #0f172a; font: 15px "Segoe UI", Arial, sans-serif; }
-    header { padding: 26px 34px 20px; background: #0f172a; color: #f8fafc; }
+    header { padding: 26px 34px 20px; background: linear-gradient(120deg, #0f172a, #1e3a8a); color: #f8fafc; }
     .eyebrow { color: #a5b4fc; font-size: 12px; font-weight: 700; letter-spacing: 3px; }
     h1 { margin: 8px 0; font-size: 30px; letter-spacing: -.5px; }
     header p { margin: 6px 0 0; color: #cbd5e1; line-height: 1.6; }
-    nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 28px; background: #fff; border-bottom: 1px solid #cbd5e1; }
+    nav { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 28px; background: #fff; border-bottom: 1px solid #cbd5e1; box-shadow: 0 3px 12px #0f172a0d; }
     button, nav a { border: 1px solid #cbd5e1; border-radius: 7px; background: #fff; padding: 9px 13px; font: inherit; color: #334155; cursor: pointer; text-decoration: none; }
     button[aria-pressed="true"] { background: #eef2ff; border-color: #818cf8; color: #3730a3; }
     button:hover, nav a:hover { background: #f1f5f9; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #818cf8; outline-offset: 3px; }
     .spacer { flex: 1; }
     #scale { min-width: 46px; text-align: center; color: #475569; }
     .legend { display: flex; flex-wrap: wrap; gap: 18px; padding: 14px 32px; font-size: 13px; background: #f8fafc; }
@@ -24,6 +25,14 @@
     #diagram { display: block; width: 100%; max-width: none; height: auto; }
     footer { padding: 0 30px 26px; line-height: 1.7; color: #475569; font-size: 13px; }
     footer a { color: #4338ca; }
+    @media (max-width: 600px) {
+      header { padding: 22px 18px; }
+      h1 { font-size: 25px; }
+      nav { position: static; padding: 12px; gap: 8px; }
+      .legend { padding: 14px 18px; gap: 12px; }
+      main { padding: 14px 12px; }
+      footer { padding: 0 18px 24px; }
+    }
     @media print {
       body { background: #fff; }
       nav { display: none; }
@@ -37,27 +46,25 @@
 </head>
 <body>
   <header>
-    <div class="eyebrow">TALLERNET / ULTIMA MILLA</div>
-    <h1>Infraestructura de la plataforma</h1>
-    <p>AWS + Kubernetes + servicios externos. Lectura vertical, de arriba hacia abajo.</p>
-    <p>Referencia: inspeccion del 12/11/2026. Dos nodos Ready y aplicaciones operativas.</p>
+    <div class="eyebrow">TALLERNET / &Uacute;LTIMA MILLA</div>
+    <h1>Infraestructura y despliegue</h1>
+    <p>AWS + Kubernetes + servicios externos.</p>
   </header>
   <nav aria-label="Controles del diagrama">
     <a href="../ultimaMilla.html">Volver al proyecto</a>
-    <button id="infra" aria-pressed="true" type="button">Infraestructura y trafico</button>
-    <button id="deploy" aria-pressed="false" type="button">Despliegue y operacion</button>
+    <button id="infra" aria-pressed="true" type="button">Infraestructura y tr&aacute;fico</button>
+    <button id="deploy" aria-pressed="false" type="button">Despliegue y operaci&oacute;n</button>
     <span class="spacer"></span>
     <button id="less" type="button" aria-label="Reducir zoom">-</button>
     <span id="scale" aria-live="polite">100 %</span>
     <button id="more" type="button" aria-label="Aumentar zoom">+</button>
     <button id="fit" type="button">Ajustar al ancho</button>
-    <a id="download" href="infraestructura.svg" download>Descargar SVG</a>
   </nav>
   <div class="legend" aria-label="Leyenda">
     <span style="--color:#6366f1">Clientes</span>
     <span style="--color:#f59e0b">Entrada / TLS</span>
     <span style="--color:#3b82f6">Aplicaciones</span>
-    <span style="--color:#10b981">Datos / mensajeria</span>
+    <span style="--color:#10b981">Datos / mensajer&iacute;a</span>
     <span style="--color:#a855f7">Externos / pruebas</span>
     <span style="--color:#eab308">Observabilidad</span>
     <span style="--color:#0ea5e9">Escalado</span>
@@ -68,13 +75,9 @@
     </div>
   </main>
   <footer>
-    <strong>Lineas continuas:</strong> trafico y dependencias.
-    <strong>Lineas punteadas:</strong> configuracion, control o integracion condicionada.<br>
-    Atlas: integracion documentada, servicio externo no inspeccionado.
-    FCM y SMTP: activacion segun configuracion.<br>
-    <strong>k6 humo:</strong> 471 solicitudes, 0 errores HTTP y 10 umbrales aprobados.
-    El escalado del HPA bajo carga no se demostro en esa corrida.<br>
-    <a href="../ultimaMilla.html">Ultima Milla - Proyecto .NET</a> |
+    <strong>L&iacute;neas continuas:</strong> tr&aacute;fico y dependencias.
+    <strong>L&iacute;neas punteadas:</strong> configuraci&oacute;n, control o integraci&oacute;n condicionada.<br>
+    <a href="../ultimaMilla.html">&Uacute;ltima Milla - Proyecto .NET</a> |
     <a href="../index.html">Portafolio</a>
   </footer>
   <script>
@@ -89,7 +92,6 @@
       const source = deployment ? 'despliegue.svg' : 'infraestructura.svg';
       diagram.src = source;
       diagram.alt = deployment ? 'Diagrama Mermaid de provisionamiento, CI/CD y operacion de TallerNet' : 'Diagrama Mermaid de infraestructura TallerNet con AWS EKS, RDS, MongoDB Atlas, k6 y servicios externos';
-      document.getElementById('download').href = source;
       document.getElementById('infra').setAttribute('aria-pressed', String(!deployment));
       document.getElementById('deploy').setAttribute('aria-pressed', String(deployment));
       setZoom(100);
