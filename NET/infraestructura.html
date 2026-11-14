@@ -20,6 +20,8 @@
     #scale { min-width: 46px; text-align: center; color: #475569; }
     .legend { display: flex; flex-wrap: wrap; gap: 18px; padding: 14px 32px; font-size: 13px; background: #f8fafc; }
     .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 7px; border-radius: 3px; background: var(--color); }
+    .legend span.borde::before { background: var(--fondo, #fff); border: 2px solid var(--color); }
+    .legend span.punteado::before { background: #fff; border: 2px dashed var(--color); }
     main { padding: 24px; }
     #canvas { overflow: auto; background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 5px 25px #0f172a0d; }
     #diagram { display: block; width: 100%; max-width: none; height: auto; }
@@ -54,13 +56,15 @@
     <a href="../ultimaMilla.html">Volver al proyecto</a>
     <button id="infra" aria-pressed="true" type="button">Infraestructura y tr&aacute;fico</button>
     <button id="deploy" aria-pressed="false" type="button">Despliegue y operaci&oacute;n</button>
+    <button id="arq" aria-pressed="false" type="button">Arquitectura de la soluci&oacute;n</button>
     <span class="spacer"></span>
     <button id="less" type="button" aria-label="Reducir zoom">-</button>
     <span id="scale" aria-live="polite">100 %</span>
     <button id="more" type="button" aria-label="Aumentar zoom">+</button>
     <button id="fit" type="button">Ajustar al ancho</button>
   </nav>
-  <div class="legend" aria-label="Leyenda">
+  <!-- La leyenda y la nota de las líneas cambian según el diagrama elegido (ver el script). -->
+  <div class="legend" id="legend" aria-label="Leyenda" aria-live="polite">
     <span style="--color:#6366f1">Clientes</span>
     <span style="--color:#f59e0b">Entrada / TLS</span>
     <span style="--color:#3b82f6">Aplicaciones</span>
@@ -75,8 +79,8 @@
     </div>
   </main>
   <footer>
-    <strong>L&iacute;neas continuas:</strong> tr&aacute;fico y dependencias.
-    <strong>L&iacute;neas punteadas:</strong> configuraci&oacute;n, control o integraci&oacute;n condicionada.<br>
+    <span id="nota"><strong>L&iacute;neas continuas:</strong> tr&aacute;fico y dependencias.
+    <strong>L&iacute;neas punteadas:</strong> configuraci&oacute;n, control o integraci&oacute;n condicionada.</span><br>
     <a href="../ultimaMilla.html">&Uacute;ltima Milla - Proyecto .NET</a> |
     <a href="../index.html">Portafolio</a>
   </footer>
@@ -88,16 +92,52 @@
       diagram.style.width = zoom + '%';
       document.getElementById('scale').textContent = zoom + ' %';
     }
-    function selectDiagram(deployment) {
-      const source = deployment ? 'despliegue.svg' : 'infraestructura.svg';
-      diagram.src = source;
-      diagram.alt = deployment ? 'Diagrama Mermaid de provisionamiento, CI/CD y operacion de TallerNet' : 'Diagrama Mermaid de infraestructura TallerNet con AWS EKS, RDS, MongoDB Atlas, k6 y servicios externos';
-      document.getElementById('infra').setAttribute('aria-pressed', String(!deployment));
-      document.getElementById('deploy').setAttribute('aria-pressed', String(deployment));
+    // Leyenda de los dos diagramas de infraestructura (la que ya tenía la página).
+    const leyendaInfra = [
+      ['#6366f1', 'Clientes'], ['#f59e0b', 'Entrada / TLS'], ['#3b82f6', 'Aplicaciones'],
+      ['#10b981', 'Datos / mensajería'], ['#a855f7', 'Externos / pruebas'], ['#eab308', 'Observabilidad'], ['#0ea5e9', 'Escalado']
+    ];
+    const notaInfra = '<strong>Líneas continuas:</strong> tráfico y dependencias. ' +
+      '<strong>Líneas punteadas:</strong> configuración, control o integración condicionada.';
+
+    // Un botón por diagrama: imagen, texto alternativo, leyenda con los colores de ESE diagrama y nota de sus líneas.
+    const diagramas = {
+      infra: { src: 'infraestructura.svg', alt: 'Diagrama Mermaid de infraestructura TallerNet con AWS EKS, RDS, MongoDB Atlas, k6 y servicios externos',
+        leyenda: leyendaInfra, nota: notaInfra },
+      deploy: { src: 'despliegue.svg', alt: 'Diagrama Mermaid de provisionamiento, CI/CD y operacion de TallerNet',
+        leyenda: leyendaInfra, nota: notaInfra },
+      arq: { src: 'arquitectura.png', alt: 'Diagrama Mermaid de la arquitectura cebolla de TallerNet: usuarios, anillo externo de presentacion e infraestructura, Application, Domain en el centro, datos y mensajeria, Worker y servicios externos',
+        leyenda: [
+          ['#6366f1', 'Usuarios'], ['#3b82f6', 'Presentación y Worker (Backoffice, Portal, Worker)'],
+          ['#3b82f6', 'Infrastructure (implementa los puertos)', 'punteado'],
+          ['#2563eb', 'Application (casos de uso y puertos)', 'borde', '#dbeafe'],
+          ['#1d4ed8', 'Domain (centro, sin dependencias)', 'borde', '#bfdbfe'],
+          ['#10b981', 'Datos y mensajería'], ['#a855f7', 'Servicios externos']
+        ],
+        nota: '<strong>Anillos:</strong> la cebolla va de afuera hacia adentro, y las dependencias siempre apuntan al centro (Domain). ' +
+          '<strong>Líneas continuas:</strong> uso y llamadas. <strong>Líneas punteadas:</strong> eventos asíncronos (outbox y colas).' }
+    };
+    function mostrarLeyenda(items) {
+      const contenedor = document.getElementById('legend');
+      // [color, texto, estilo opcional ('borde' o 'punteado'), fondo opcional]: el cuadradito se ve como en el dibujo.
+      contenedor.replaceChildren(...items.map(([color, texto, estilo, fondo]) => {
+        const item = document.createElement('span');
+        item.style.setProperty('--color', color);
+        if (estilo) item.className = estilo;
+        if (fondo) item.style.setProperty('--fondo', fondo);
+        item.textContent = texto;
+        return item;
+      }));
+    }
+    function selectDiagram(id) {
+      diagram.src = diagramas[id].src;
+      diagram.alt = diagramas[id].alt;
+      mostrarLeyenda(diagramas[id].leyenda);
+      document.getElementById('nota').innerHTML = diagramas[id].nota;
+      Object.keys(diagramas).forEach(clave => document.getElementById(clave).setAttribute('aria-pressed', String(clave === id)));
       setZoom(100);
     }
-    document.getElementById('infra').addEventListener('click', () => selectDiagram(false));
-    document.getElementById('deploy').addEventListener('click', () => selectDiagram(true));
+    Object.keys(diagramas).forEach(clave => document.getElementById(clave).addEventListener('click', () => selectDiagram(clave)));
     document.getElementById('less').addEventListener('click', () => setZoom(zoom - 25));
     document.getElementById('more').addEventListener('click', () => setZoom(zoom + 25));
     document.getElementById('fit').addEventListener('click', () => setZoom(100));

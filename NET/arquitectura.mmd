@@ -1,0 +1,78 @@
+%%{init: {"theme": "base", "themeVariables": {"fontFamily": "Arial, Helvetica, sans-serif", "fontSize": "15px", "primaryTextColor": "#172554", "lineColor": "#64748b", "clusterBkg": "#f8fafc", "clusterBorder": "#cbd5e1", "edgeLabelBackground": "#ffffff"}, "themeCSS": ".nodeLabel, .edgeLabel, .cluster-label, .label, span, p, text { font-family: Arial, Helvetica, sans-serif !important; } .cluster-label span { font-weight: bold; }", "flowchart": {"curve": "basis", "nodeSpacing": 30, "rankSpacing": 50, "padding": 16, "htmlLabels": true, "wrappingWidth": 420}}}%%
+flowchart TB
+    subgraph U["1 · Usuarios"]
+        direction LR
+        AP["<b>Administrador de plataforma</b><br/>banderas de todos los operadores"]
+        AO["<b>Administrador del operador</b><br/>tarifas, reglas, usuarios<br/>reportes y liquidaciones de su operador"]
+        OP["<b>Despachador y operario</b><br/>despacho, recepción y rendición"]
+        CO["<b>Comercio</b><br/>altas, retiros y cuenta corriente"]
+        DE["<b>Destinatario</b><br/>seguimiento público"]
+        RE["<b>Repartidor · app .NET MAUI</b><br/>sin señal: SQLite cifrado<br/>sincroniza al volver"]
+        AP ~~~ AO ~~~ OP ~~~ CO ~~~ DE ~~~ RE
+    end
+
+    subgraph ONION["2 · Arquitectura cebolla (onion): las dependencias apuntan hacia el centro"]
+        direction TB
+        subgraph EXT["Anillo externo · presentación e infraestructura"]
+            direction LR
+            BO["<b>Backoffice</b><br/>Razor Pages · SignalR<br/>API del repartidor · 2 a 4 réplicas"]
+            PO["<b>Portal de Comercio</b><br/>Blazor SSR · seguimiento<br/>2 réplicas"]
+            INF["<b>Infrastructure</b><br/>EF Core · Redis · RabbitMQ · JWT<br/>implementa los puertos"]
+            BO ~~~ PO ~~~ INF
+        end
+        subgraph APL["Application · casos de uso y puertos (interfaces)"]
+            direction TB
+            APP["<b>Casos de uso</b><br/>AdmitirEnvio · DespacharRuta · SincronizarEntregas ...<br/>IEnvioRepositorio · ICacheLectura · IPublicadorMensajes ..."]
+            subgraph DOMR["Domain · centro, sin dependencias"]
+                DOM["<b>Entidades y reglas</b><br/>Envio · Bulto · Ruta · ReglaOperativa<br/>estados y transiciones válidas"]
+            end
+        end
+        EXT -- "Backoffice y Portal usan los casos de uso · Infrastructure implementa los puertos" --> APL
+        APP -- "usa" --> DOMR
+    end
+
+    subgraph D["3 · Datos y mensajería"]
+        direction LR
+        PG[("<b>PostgreSQL</b><br/>fuente de verdad<br/>filtro por operador")]
+        MQ{{"<b>RabbitMQ</b><br/>avisos · correos · push<br/>historial · tablero<br/>reintentos y fallidos"}}
+        RD[("<b>Redis</b><br/>caché · claves<br/>canal de SignalR")]
+        MG[("<b>MongoDB Atlas</b><br/>historial de eventos<br/>retención 180 días")]
+        PG -. "outbox" .-> MQ
+        MQ ~~~ RD ~~~ MG
+    end
+
+    WK["<b>Worker</b> · fuera del núcleo<br/>consume las colas · tareas programadas sin duplicar<br/>usa Avisos, HistorialEventos y Observabilidad"]
+
+    subgraph X["4 · Servicios externos"]
+        direction LR
+        WH["<b>Sistema del comercio</b><br/>aviso firmado HMAC"]
+        SM["<b>Gmail SMTP</b><br/>correo al destinatario"]
+        FB["<b>Firebase Cloud Messaging</b><br/>push con la app cerrada"]
+        WH ~~~ SM ~~~ FB
+    end
+
+    U -- "&nbsp;HTTPS&nbsp;" --> ONION
+    ONION -- "Infrastructure lee y escribe" --> D
+    D -. "consume las colas" .-> WK
+    WK -- "avisa" --> X
+
+    classDef clientes fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#172554
+    classDef apps fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px,color:#172554
+    classDef infra fill:#ffffff,stroke:#3b82f6,stroke-width:1.2px,stroke-dasharray:4 3,color:#172554
+    classDef aplicacion fill:#ffffff,stroke:#2563eb,stroke-width:1.5px,color:#172554
+    classDef dominio fill:#ffffff,stroke:#1d4ed8,stroke-width:2px,color:#172554
+    classDef datos fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#172554
+    classDef externos fill:#faf5ff,stroke:#a855f7,stroke-width:1.5px,color:#172554
+
+    class AP,AO,OP,CO,DE,RE clientes
+    class BO,PO,WK apps
+    class INF infra
+    class APP aplicacion
+    class DOM dominio
+    class PG,RD,MG,MQ datos
+    class WH,SM,FB externos
+
+    style ONION fill:#f8fafc,stroke:#94a3b8,stroke-width:1.5px
+    style EXT fill:#f1f5f9,stroke:#cbd5e1
+    style APL fill:#dbeafe,stroke:#3b82f6,stroke-width:1.5px
+    style DOMR fill:#bfdbfe,stroke:#1d4ed8,stroke-width:2px
