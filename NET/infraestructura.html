@@ -60,7 +60,7 @@
     <button id="more" type="button" aria-label="Aumentar zoom">+</button>
     <button id="fit" type="button">Ajustar al ancho</button>
   </nav>
-  <div class="legend" aria-label="Leyenda">
+  <div id="legend" class="legend" aria-label="Leyenda" aria-live="polite">
     <span style="--color:#6366f1">Clientes</span>
     <span style="--color:#f59e0b">Entrada / TLS</span>
     <span style="--color:#3b82f6">Aplicaciones</span>
@@ -82,6 +82,15 @@
   </footer>
   <script>
     const diagram = document.getElementById('diagram');
+    const legend = document.getElementById('legend');
+    const infrastructureLegend = legend.innerHTML;
+    const deploymentLegend = [
+      ['#6366f1', 'Codigo fuente'],
+      ['#10b981', 'Validacion / disponibilidad'],
+      ['#3b82f6', 'Entrega / despliegue'],
+      ['#f59e0b', 'Seguridad / escaneos'],
+      ['#a855f7', 'Infraestructura base']
+    ];
     let zoom = 100;
     function setZoom(value) {
       zoom = Math.max(50, Math.min(300, value));
@@ -89,9 +98,19 @@
       document.getElementById('scale').textContent = zoom + ' %';
     }
     function selectDiagram(deployment) {
-      const source = deployment ? 'despliegue.svg' : 'infraestructura.svg';
+      const source = deployment ? 'despliegue.png' : 'infraestructura.svg';
       diagram.src = source;
       diagram.alt = deployment ? 'Diagrama Mermaid de provisionamiento, CI/CD y operacion de TallerNet' : 'Diagrama Mermaid de infraestructura TallerNet con AWS EKS, RDS, MongoDB Atlas, k6 y servicios externos';
+      if (deployment) {
+        legend.replaceChildren(...deploymentLegend.map(([color, label]) => {
+          const item = document.createElement('span');
+          item.style.setProperty('--color', color);
+          item.textContent = label;
+          return item;
+        }));
+      } else {
+        legend.innerHTML = infrastructureLegend;
+      }
       document.getElementById('infra').setAttribute('aria-pressed', String(!deployment));
       document.getElementById('deploy').setAttribute('aria-pressed', String(deployment));
       setZoom(100);

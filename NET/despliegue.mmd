@@ -1,0 +1,24 @@
+%%{init: {"theme":"base","fontFamily":"Segoe UI, Arial, sans-serif","themeCSS":"& { font-family: Segoe UI, Arial, sans-serif; }","themeVariables":{"fontSize":"18px","lineColor":"#64748b","primaryTextColor":"#172554"},"flowchart":{"htmlLabels":true,"curve":"basis","nodeSpacing":30,"rankSpacing":35,"wrappingWidth":310,"padding":20,"diagramPadding":24,"useMaxWidth":false}}}%%
+flowchart TB
+    git("GitHub<br/>PR / push a main / ejecucion manual")
+    ci("1. Validar · .NET 10<br/>Restore + build Release<br/>Pruebas + integracion PostgreSQL")
+    images("2. Publicar · Docker + ECR + Trivy<br/>Tres imagenes con SHA inmutable<br/>Solo con CI exitoso, sin PR y AWS habilitado")
+    migrate("3. Preparar · EKS<br/>Actualizar Secrets existentes<br/>Job de migracion: esperar exito")
+    deploy("4. Desplegar · Kustomize / kubectl<br/>Backoffice + Portal<br/>Worker: 1 o 0 segun bandera")
+    ready("5. Verificar disponibilidad<br/>Rollouts + metrics-server<br/>HPA Backoffice: 2 a 4 pods")
+    security("Seguridad del pipeline<br/>GitHub Secrets + sesion temporal AWS<br/>Permiso GitHub: contents read<br/>SCA y Trivy: hallazgos no bloqueantes")
+    platform("Base previa · Terraform + Helm<br/>EKS / ALB + ACM / RDS / ECR<br/>NGINX / Redis / RabbitMQ / LGTM<br/>Red, roles y DNS del laboratorio")
+    git --> ci --> images --> migrate --> deploy --> ready
+    security -.-> ci
+    security -.-> migrate
+    platform -.-> migrate
+    classDef source fill:#eef2ff,stroke:#6366f1,color:#312e81,stroke-width:2px
+    classDef validation fill:#ecfdf5,stroke:#10b981,color:#064e3b,stroke-width:2px
+    classDef delivery fill:#eff6ff,stroke:#3b82f6,color:#172554,stroke-width:2px
+    classDef security fill:#fff7ed,stroke:#f59e0b,color:#7c2d12,stroke-width:2px
+    classDef platform fill:#faf5ff,stroke:#a855f7,color:#581c87,stroke-width:2px
+    class git source
+    class ci,ready validation
+    class images,migrate,deploy delivery
+    class security security
+    class platform platform
