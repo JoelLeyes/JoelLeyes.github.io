@@ -125,8 +125,12 @@
           '<strong>Líneas continuas:</strong> uso y llamadas. <strong>Líneas punteadas:</strong> eventos asíncronos (outbox y colas).' },
       dominio: { src: 'dominio.png', alt: 'Diagrama de clases del modelado de dominio: cada relación es una línea y la cardinalidad está junto a cada entidad',
         leyenda: [
-          ['#9370DB', 'Clase', 'borde', '#ECECFF'],
-          ['#5b21b6', 'Relación']
+          ['#6366f1', 'Operador, comercio y usuarios'],
+          ['#3b82f6', 'Envío, ruta y entrega'],
+          ['#10b981', 'Cobertura, tarifas y liquidación'],
+          ['#0ea5e9', 'Reglas operativas'],
+          ['#a855f7', 'Avisos al comercio'],
+          ['#64748b', 'Relación']
         ],
         nota: 'Cada línea une dos clases. El número pegado a cada caja es la cardinalidad de ese extremo y el texto en cursiva es el verbo. ' +
           '<strong>0..*</strong> es muchos opcionales, <strong>1..*</strong> es al menos uno y <strong>0..1</strong> es opcional.' }
