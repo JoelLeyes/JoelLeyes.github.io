@@ -11,7 +11,7 @@ Portafolio Profesional | Tecnólogo en Tecnologías de la Información | Cloud &
 
 Los SVG deben conservar `font-family: "Segoe UI", Arial, sans-serif` en su regla raíz `#my-svg`: sus cajas de texto se calcularon con esa tipografía. Si se regeneran, comprobar ambos diagramas como imágenes y como archivos independientes para evitar etiquetas recortadas.
 
-La infraestructura se presenta de arriba hacia abajo: clientes, entrada, aplicaciones y mensajería, procesamiento y servicios externos. Backoffice y Portal comparten un bloque visual, no un Deployment; sus conexiones comunes se agrupan para evitar flechas repetidas. La lectura de Atlas corresponde al Backoffice. El HPA modifica pods, no nodos; las réplicas se indican como rango para no confundir el dibujo con un monitor en vivo. Fuente editable: [`NET/infraestructura.mmd`](NET/infraestructura.mmd).
+La infraestructura se presenta de arriba hacia abajo, sin numeración: clientes, entrada, aplicaciones y mensajería, procesamiento y servicios externos. NGINX muestra tres rutas explícitas: `api` hacia Backoffice/API, y `app` y `tracking` hacia Portal. El dominio adicional `backoffice` también llega al Backoffice. La lectura de Atlas corresponde al Backoffice. El HPA modifica pods, no nodos; las réplicas se indican como rango para no confundir el dibujo con un monitor en vivo. Fuente editable: [`NET/infraestructura.mmd`](NET/infraestructura.mmd).
 
 ## 🚀 Proyectos Destacados
 
