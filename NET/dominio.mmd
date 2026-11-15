@@ -1,135 +1,197 @@
-%%{init: {"theme": "base", "themeVariables": {"fontFamily": "Arial, Helvetica, sans-serif", "fontSize": "15px", "primaryTextColor": "#172554", "lineColor": "#64748b", "clusterBkg": "#f8fafc", "clusterBorder": "#cbd5e1", "edgeLabelBackground": "#ffffff"}, "themeCSS": ".nodeLabel, .edgeLabel, .cluster-label, .label, span, p, text { font-family: Arial, Helvetica, sans-serif !important; } .cluster-label span { font-weight: bold; }", "flowchart": {"curve": "basis", "nodeSpacing": 26, "rankSpacing": 42, "padding": 16, "htmlLabels": true, "wrappingWidth": 260}}}%%
-flowchart TB
+%%{init: {"theme": "base", "themeVariables": {"fontFamily": "Trebuchet MS, Verdana, Arial, sans-serif", "fontSize": "16px", "primaryColor": "#ECECFF", "primaryTextColor": "#333333", "primaryBorderColor": "#9370DB", "lineColor": "#5b21b6"}}}%%
+classDiagram
+    direction TB
 
-    subgraph ORG["1 · Organización · todo pertenece a un operador"]
-        direction TB
-        OP["<b>Operador</b><br/>nombre · color de marca<br/>máximo de intentos · zona horaria<br/>teléfono · email"]
-        subgraph ORG_F[" "]
-            direction LR
-            US["<b>Usuario</b> · *<br/>nombre · email · rol<br/>activo<br/>0..1 comercio"]
-            CO["<b>Comercio</b> · *<br/>nombre comercial · razón social<br/>documento fiscal · dirección<br/>activo"]
-            RE["<b>Repartidor</b> · *<br/>nombre · documento<br/>teléfono · activo<br/>0..1 usuario"]
-            VE["<b>Vehículo</b> · *<br/>patente · descripción<br/>peso y volumen máximos<br/>máximo de paradas · activo"]
-        end
-        subgraph AVS["avisos que recibe el comercio"]
-            direction LR
-            SW["<b>Suscripción webhook</b> · *<br/>url · activa"]
-            AV["<b>Aviso al comercio</b> · *<br/>mensaje · fecha · leído"]
-        end
-        OP -- "tiene" --> ORG_F
-        CO -- "recibe" --> AVS
-    end
+    class Operador {
+        Int Id
+        String RazonSocial
+        String IdentidadVisual
+        Bool Activo
+    }
+    class Comercio {
+        Int Id
+        String NombreComercial
+        String RazonSocial
+        String DocumentoFiscal
+        DtDireccion DireccionPrincipal
+        Bool Activo
+    }
+    class Usuario {
+        Int Id
+        String Nombre
+        String Email
+        String PasswordHash
+        Rol Rol
+    }
+    class Envio {
+        Int Id
+        String NumeroDeSeguimiento
+        String TokenSeguimientoPublico
+        EstadoEnvio Estado
+        Modalidad Modalidad
+        Float TarifaCalculada
+        Time CreadoEn
+    }
+    class Bulto {
+        Int Id
+        String CodigoIdentificacion
+        Float PesoKg
+        DtDimensiones Dimensiones
+        Bool RecibidoEnDeposito
+    }
+    class Destinatario {
+        Int Id
+        String NombreCompleto
+        String Documento
+        String Telefono
+        DtDireccion DireccionEntrega
+    }
+    class EventoEnvio {
+        Int Id
+        String Tipo
+        String Origen
+        String Responsable
+        Coordenada Geolocalizacion
+        Time OcurridoEn
+    }
+    class IntentoEntrega {
+        Int Id
+        Bool Exitoso
+        Time FechaHora
+    }
+    class PruebaDeEntrega {
+        Int Id
+        String Firma
+        String Foto
+        String NombreReceptor
+        String DocumentoReceptor
+        Coordenada Geolocalizacion
+        Time CapturadoEn
+    }
+    class MotivoNoEntrega {
+        Int Id
+        String Descripcion
+        Bool RequiereReprogramacionAutomatica
+        Bool Activo
+    }
+    class Devolucion {
+        Int Id
+        String Motivo
+        EstadoDevolucion Estado
+        Time IniciadaEn
+    }
+    class ZonaCobertura {
+        Int Id
+        String Nombre
+        String Poligono
+    }
+    class FranjaHoraria {
+        Int Id
+        String Nombre
+        Time HoraInicio
+        Time HoraFin
+    }
+    class Vehiculo {
+        Int Id
+        String Patente
+        Float CapacidadPesoKg
+        Float CapacidadVolumenM3
+        Bool Activo
+    }
+    class Ruta {
+        Int Id
+        DateTime Fecha
+        EstadoRuta Estado
+    }
+    class Parada {
+        Int Id
+        Int IntentoDeEntrega
+        Int Orden
+        DateTime CompletadaEn
+    }
+    class VersionTarifa {
+        Int Id
+        DateTime VigenteDesde
+        DateTime VigenteHasta
+    }
+    class ReglaTarifaria {
+        Int Id
+        Modalidad Modalidad
+        Float RangoPesoMinKg
+        Float RangoPesoMaxKg
+        Float PrecioBase
+        Float PrecioPorKgExtra
+        Float RecargoUrgente
+        Float Bonificacion
+    }
+    class VersionReglaOperativa {
+        Int Id
+        Int MaximoIntentos
+        Int PlazoEntreIntentosHoras
+        Bool ExigeFirma
+        Bool ExigeFoto
+        Bool ExigeDocumento
+        Int PlazoComprometidoHorasEstandar
+        Int PlazoComprometidoHorasUrgente
+        DateTime VigenteDesde
+        DateTime VigenteHasta
+    }
+    class SuscripcionAviso {
+        Int Id
+        EstadoEnvio TipoEvento
+        String UrlWebhook
+        String Secreto
+    }
+    class AvisoComercio {
+        Int Id
+        String PayloadJson
+        EstadoAvisoComercio Estado
+        Int CantidadIntentos
+        Time ProximoIntentoEn
+    }
+    class Incidencia {
+        Int Id
+        String Descripcion
+        EstadoIncidencia Estado
+        Time CreadaEn
+    }
+    class Liquidacion {
+        Int Id
+        Time PeriodoDesde
+        Time PeriodoHasta
+        Float MontoTotal
+        Bool Cerrada
+    }
 
-    subgraph COB["2 · Cobertura y tarifas · las publica el operador"]
-        direction LR
-        subgraph ZON[" "]
-            direction TB
-            ZO["<b>Zona de cobertura</b> · *<br/>nombre · polígono"]
-            FR["<b>Franja horaria</b> · *<br/>nombre · desde · hasta<br/>activa · zona 0..1"]
-            ZO -- "define" --> FR
-        end
-        RO["<b>Regla operativa</b> · *<br/>intentos · plazos<br/>exige firma, foto y documento<br/>entrega parcial · vigencia · activa"]
-        subgraph TAR[" "]
-            direction TB
-            RT["<b>Regla tarifaria</b> · *<br/>base · kg · km · cm³<br/>recargos · precio del retiro<br/>activa"]
-            VT["<b>Vigencia de tarifa</b> · *<br/>desde · hasta"]
-            RT -- "versiona" --> VT
-        end
-        ZON ~~~ RO ~~~ TAR
-    end
-
-    subgraph ENV_G["3 · Envío · lo crea el comercio · muchos por comercio"]
-        direction TB
-        EN["<b>Envío</b><br/>número de seguimiento · estado<br/>tarifa calculada · urgente · intentos<br/>clave externa · versión<br/>zona 0..1 · franja 0..1 · regla 0..1 · ruta 0..1"]
-        subgraph COMP["composición del envío"]
-            direction LR
-            BU["<b>Bulto</b> · 1..*<br/>código · peso · medidas<br/>estado · recibido en depósito"]
-            DE["<b>Destinatario</b> · 1<br/>nombre · documento<br/>teléfono"]
-            DI["<b>Dirección</b> · 1<br/>calle · número<br/>apartamento<br/>latitud · longitud"]
-            HI["<b>Historial de estado</b> · 1..*<br/>estado · fecha<br/>motivo · responsable"]
-            IT["<b>Intento de entrega</b> · *<br/>número · fecha · resultado<br/>puede tener prueba"]
-            PR["<b>Prueba de entrega</b> · *<br/>foto · firma · receptor<br/>documento · geolocalización"]
-            REC["<b>Recepción en depósito</b> · 0..1<br/>esperados · recibidos<br/>discrepancia · faltantes"]
-            BU ~~~ DE ~~~ DI ~~~ HI ~~~ IT ~~~ PR ~~~ REC
-        end
-        subgraph EXTRA["hechos del envío"]
-            direction LR
-            NO["<b>Novedad</b> · *<br/>descripción · fecha"]
-            INC["<b>Incidencia</b> · *<br/>descripción · fecha<br/>resuelta"]
-            NO ~~~ INC
-        end
-        subgraph EST["estados posibles"]
-            direction LR
-            EE["<b>Estado del envío</b><br/>Admitido · En depósito<br/>Asignado a ruta · En tránsito<br/>Entregado · Entrega parcial<br/>No entregado · Reprogramado<br/>En devolución · Devuelto · Extraviado"]
-            EB["<b>Estado del bulto</b><br/>Pendiente · En ruta · Entregado<br/>No entregado<br/>Pendiente de nueva visita<br/>Devuelto · Extraviado"]
-            EE ~~~ EB
-        end
-        EN -- "compone" --> COMP
-        COMP -- "registra" --> EXTRA
-        EXTRA -. "estado" .-> EST
-    end
-
-    subgraph EJE["4 · Ejecución de la jornada"]
-        direction LR
-        subgraph DES["despacho"]
-            direction TB
-            RU["<b>Ruta</b><br/>fecha · iniciada en<br/>1 repartidor · vehículo 0..1"]
-            PA["<b>Parada</b> · 1..*<br/>orden · completada en<br/>visita exactamente 1 envío"]
-            RU -- "ordena" --> PA
-        end
-        subgraph RET["retiro en domicilio · lo pide el comercio"]
-            direction TB
-            SR["<b>Solicitud de retiro</b><br/>dirección · contacto · fecha<br/>bultos · peso · tarifa<br/>ruta 0..1 · envío 0..1 · franja 0..1"]
-            subgraph RET_F[" "]
-                direction LR
-                CR["<b>Comprobante de retiro</b> · *<br/>resultado · códigos<br/>foto · firma · quien entrega"]
-                ER["<b>Estado del retiro</b><br/>Solicitado · Programado<br/>En curso · Completado<br/>No retirado · En depósito<br/>Cancelado"]
-            end
-            SR -- "evidencia · estado" --> RET_F
-        end
-        DES ~~~ RET
-    end
-
-    subgraph CIE["5 · Cierre"]
-        direction LR
-        LI["<b>Liquidación</b> · * por comercio<br/>período desde / hasta<br/>monto · cerrada"]
-        CD["<b>Cierre diario</b> · * por operador<br/>día · admitidos · entregados a tiempo<br/>intentos fallidos · devueltos<br/>retiros completados"]
-        LI ~~~ CD
-    end
-
-    ORG -- "publica" --> COB
-    COB -- "admite envíos" --> ENV_G
-    ENV_G -- "se reparte y se retira" --> EJE
-    EJE -- "se cierra" --> CIE
-
-    classDef org fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#172554
-    classDef cob fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#172554
-    classDef env fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px,color:#172554
-    classDef des fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#172554
-    classDef ret fill:#faf5ff,stroke:#a855f7,stroke-width:1.5px,color:#172554
-    classDef cie fill:#f0f9ff,stroke:#0ea5e9,stroke-width:1.5px,color:#172554
-    classDef est fill:#ffffff,stroke:#64748b,stroke-width:1.4px,stroke-dasharray:5 4,color:#172554
-
-    class OP,US,CO,RE,VE,SW,AV org
-    class ZO,FR,RO,RT,VT cob
-    class EN,BU,DE,DI,HI,IT,PR,REC,NO,INC env
-    class RU,PA des
-    class SR,CR ret
-    class LI,CD cie
-    class EE,EB,ER est
-
-    style ORG fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px
-    style ORG_F fill:#eef2ff,stroke:#c7d2fe
-    style AVS fill:#eef2ff,stroke:#c7d2fe
-    style COB fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px
-    style ZON fill:#fffbeb,stroke:#fcd34d
-    style TAR fill:#fffbeb,stroke:#fcd34d
-    style ENV_G fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px
-    style COMP fill:#dbeafe,stroke:#93c5fd
-    style EXTRA fill:#dbeafe,stroke:#93c5fd
-    style EST fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:5 4
-    style EJE fill:#f8fafc,stroke:#94a3b8,stroke-width:1.5px
-    style DES fill:#ecfdf5,stroke:#10b981
-    style RET fill:#faf5ff,stroke:#a855f7
-    style RET_F fill:#faf5ff,stroke:#e9d5ff
-    style CIE fill:#f0f9ff,stroke:#0ea5e9,stroke-width:1.5px
+    Operador "1" --> "0..*" Comercio : atiende
+    Operador "1" --> "1..*" Usuario : tiene cuenta
+    Comercio "0..1" --> "0..*" Usuario : tiene
+    Operador "1" --> "0..*" ZonaCobertura : delimita
+    Operador "1" --> "0..*" VersionTarifa : define
+    Operador "1" --> "0..*" VersionReglaOperativa : establece
+    Operador "1" --> "0..*" Vehiculo : posee
+    Operador "1" --> "0..*" MotivoNoEntrega : configura
+    Operador "1" --> "0..*" Ruta : planifica
+    Operador "1" --> "0..*" Destinatario : registra
+    Operador "1" --> "0..*" Incidencia : gestiona
+    Comercio "1" --> "0..*" Envio : solicita
+    Comercio "1" --> "0..*" SuscripcionAviso : parametriza
+    Comercio "1" --> "0..*" Liquidacion : recibe
+    Usuario "1" --> "0..*" Ruta : asignado
+    Usuario "1" --> "0..*" IntentoEntrega : ejecutado
+    Envio "1" --> "1..*" Bulto : contiene
+    Envio "1" --> "1" Destinatario : se dirige
+    Envio "1" --> "1..*" EventoEnvio : historial
+    Envio "1" --> "0..*" IntentoEntrega : registra
+    Envio "1" --> "0..1" Devolucion : procesa
+    Envio "1" --> "1..*" Parada : procesa
+    Envio "1" --> "0..*" Incidencia : reporta
+    Envio "0..*" --> "1" VersionTarifa : aplica
+    IntentoEntrega "1" --> "0..1" PruebaDeEntrega : evidencia
+    IntentoEntrega "1" --> "0..1" MotivoNoEntrega : causa falla
+    ZonaCobertura "1" --> "1..*" FranjaHoraria : ofrece
+    ZonaCobertura "1" --> "0..*" ReglaTarifaria : tiene
+    VersionTarifa "1" --> "0..*" ReglaTarifaria : tiene
+    Ruta "1" --> "1..*" Parada : compone
+    Ruta "1" --> "0..*" Vehiculo : asigna
+    SuscripcionAviso "1" --> "0..*" AvisoComercio : genera

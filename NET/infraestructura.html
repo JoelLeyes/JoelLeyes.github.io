@@ -123,19 +123,13 @@
         ],
         nota: '<strong>Anillos:</strong> la cebolla va de afuera hacia adentro, y las dependencias siempre apuntan al centro (Domain). ' +
           '<strong>Líneas continuas:</strong> uso y llamadas. <strong>Líneas punteadas:</strong> eventos asíncronos (outbox y colas).' },
-      dominio: { src: 'dominio.png', alt: 'Diagrama Mermaid del modelado de dominio de TallerNet: operador, comercio, cobertura, envío, despacho, retiro y cierre',
+      dominio: { src: 'dominio.png', alt: 'Diagrama de clases del modelado de dominio: cada relación es una línea y la cardinalidad está junto a cada entidad',
         leyenda: [
-          ['#6366f1', 'Organización'],
-          ['#f59e0b', 'Cobertura y tarifas'],
-          ['#3b82f6', 'Envío'],
-          ['#10b981', 'Despacho'],
-          ['#a855f7', 'Retiro'],
-          ['#0ea5e9', 'Cierre'],
-          ['#64748b', 'Estados', 'punteado']
+          ['#9370DB', 'Clase', 'borde', '#ECECFF'],
+          ['#5b21b6', 'Relación']
         ],
-        nota: '<strong>Líneas continuas:</strong> pertenencia, creación y composición. ' +
-          '<strong>Líneas punteadas:</strong> el estado posible. ' +
-          '<strong>*</strong> es muchos y <strong>0..1</strong> es opcional. Cada envío conserva la zona, la franja y la tarifa con las que se admitió.' }
+        nota: 'Cada línea une dos clases. El número pegado a cada caja es la cardinalidad de ese extremo y el texto en cursiva es el verbo. ' +
+          '<strong>0..*</strong> es muchos opcionales, <strong>1..*</strong> es al menos uno y <strong>0..1</strong> es opcional.' }
     };
     function mostrarLeyenda(items) {
       const contenedor = document.getElementById('legend');
