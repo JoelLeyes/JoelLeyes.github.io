@@ -1,0 +1,111 @@
+%%{init: {"theme": "base", "themeVariables": {"fontFamily": "Arial, Helvetica, sans-serif", "fontSize": "16px", "primaryTextColor": "#172554", "lineColor": "#64748b", "clusterBkg": "#f8fafc", "clusterBorder": "#cbd5e1", "edgeLabelBackground": "#ffffff"}, "themeCSS": ".nodeLabel, .edgeLabel, .cluster-label, .label, span, p, text { font-family: Arial, Helvetica, sans-serif !important; } .cluster-label span { font-weight: bold; }", "flowchart": {"curve": "basis", "nodeSpacing": 28, "rankSpacing": 40, "padding": 18, "htmlLabels": true, "wrappingWidth": 280, "useMaxWidth": false}}}%%
+flowchart TB
+
+    subgraph ORG["1 · Organización · todo pertenece a un operador"]
+        direction TB
+        OP["<b>Operador</b> · agregado raíz<br/>nombre · color de marca<br/>máximo de intentos<br/>zona horaria · contacto"]
+        subgraph MIEM["1 operador a muchos"]
+            direction LR
+            US["<b>Usuario</b><br/>nombre · email<br/>rol · activo<br/>0..1 comercio o repartidor"]
+            CO["<b>Comercio</b><br/>nombre comercial<br/>razón social · documento<br/>dirección · activo"]
+            RE["<b>Repartidor</b><br/>nombre · documento<br/>teléfono · activo"]
+            VE["<b>Vehículo</b><br/>patente<br/>peso y volumen máximos<br/>máximo de paradas"]
+            US ~~~ CO ~~~ RE ~~~ VE
+        end
+        OP --> MIEM
+    end
+
+    subgraph COB["2 · Cobertura y tarifas · las publica el operador"]
+        direction LR
+        ZO["<b>Zona de cobertura</b><br/>nombre · polígono<br/>ofrece muchas franjas"]
+        FR["<b>Franja horaria</b> · * por zona<br/>nombre · desde · hasta<br/>activa"]
+        RO["<b>Regla operativa</b> · *<br/>intentos y plazos<br/>firma, foto y geocerca<br/>entrega parcial · vigencia"]
+        RT["<b>Regla tarifaria</b> · *<br/>base · kg · km · cm³<br/>recargo urgente<br/>precio del retiro · activa"]
+        VI["<b>Vigencia de tarifa</b> · * por regla<br/>desde · hasta"]
+        ZO -- "1 ofrece *" --> FR
+        RT -- "1 versiona *" --> VI
+        FR ~~~ RO
+        RO ~~~ RT
+    end
+
+    subgraph ENV["3 · Envío · agregado central, muchos por comercio"]
+        direction TB
+        EN["<b>Envío</b> · raíz<br/>número de seguimiento · estado<br/>tarifa calculada · urgente · intentos<br/>clave externa · versión<br/>zona 0..1 · franja 0..1<br/>tarifa 0..1 · ruta 0..1"]
+        subgraph PARTES["composición"]
+            direction LR
+            BU["<b>Bulto</b> · 1..*<br/>código · peso · medidas<br/>estado · recibido en depósito"]
+            DE["<b>Destinatario</b> · 1<br/>nombre · documento<br/>teléfono"]
+            DI["<b>Dirección</b> · 1<br/>calle · número<br/>latitud · longitud"]
+            HI["<b>Historial de estado</b> · 1..*<br/>estado · fecha<br/>motivo · responsable"]
+            IT["<b>Intento de entrega</b> · 1..*<br/>número · fecha<br/>resultado"]
+            PRU["<b>Prueba de entrega</b> · 1..*<br/>foto · firma · receptor<br/>geolocalización"]
+            REC["<b>Recepción en depósito</b> · 1..*<br/>esperados · recibidos<br/>discrepancia · faltantes"]
+            BU ~~~ DE ~~~ DI ~~~ HI ~~~ IT ~~~ PRU ~~~ REC
+        end
+        subgraph ESTADOS["estados posibles"]
+            direction LR
+            EST["<b>Estado del envío</b><br/>Admitido · En depósito · Asignado a ruta<br/>En tránsito · Entregado · Entrega parcial<br/>No entregado · Reprogramado<br/>En devolución · Devuelto · Extraviado"]
+            ESB["<b>Estado del bulto</b><br/>Pendiente · En ruta · Entregado<br/>No entregado · Pendiente de nueva visita<br/>Devuelto · Extraviado"]
+            EST ~~~ ESB
+        end
+        EN -- "compone" --> PARTES
+        PARTES --> ESTADOS
+    end
+
+    subgraph EJ["4 · Ejecución de la jornada"]
+        direction LR
+        subgraph DES["Despacho"]
+            direction TB
+            RU["<b>Ruta</b> · raíz<br/>fecha · iniciada en<br/>1 repartidor · vehículo 0..1"]
+            PA["<b>Parada</b> · 1..* de la ruta<br/>orden · completada en<br/>visita exactamente 1 envío"]
+            RU -- "1 ordena *" --> PA
+        end
+        subgraph RET["Retiro en domicilio"]
+            direction TB
+            SR["<b>Solicitud de retiro</b> · raíz<br/>* por comercio<br/>dirección · fecha · motivo<br/>bultos · peso · tarifa<br/>ruta 0..1 · envío 0..1 · franja 0..1"]
+            CR["<b>Comprobante de retiro</b> · 1..*<br/>resultado · códigos<br/>foto · firma · quien entrega"]
+            ESR["<b>Estado del retiro</b><br/>Solicitado · Programado · En curso<br/>Completado · No retirado<br/>En depósito · Cancelado"]
+            SR -- "1 evidencia *" --> CR
+            SR -.-> ESR
+        end
+        DES ~~~ RET
+    end
+
+    subgraph CIE["5 · Cierre"]
+        direction LR
+        LI["<b>Liquidación</b> · * por comercio<br/>período desde / hasta<br/>monto · cerrada"]
+        CD["<b>Cierre diario</b> · * por operador<br/>día · admitidos · entregados a tiempo<br/>intentos fallidos · devueltos<br/>retiros completados"]
+        LI ~~~ CD
+    end
+
+    ORG -- "publica" --> COB
+    COB -- "admite envíos" --> ENV
+    ENV -- "se reparte y se retira" --> EJ
+    EJ -- "se cierra" --> CIE
+
+    classDef organizacion fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#312e81
+    classDef cobertura fill:#fff7ed,stroke:#f59e0b,stroke-width:1.5px,color:#7c2d12
+    classDef envio fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px,color:#172554
+    classDef despacho fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px,color:#064e3b
+    classDef retiro fill:#faf5ff,stroke:#a855f7,stroke-width:1.5px,color:#581c87
+    classDef cierre fill:#f0f9ff,stroke:#0ea5e9,stroke-width:1.5px,color:#0c4a6e
+    classDef enumeracion fill:#f8fafc,stroke:#64748b,stroke-width:1.2px,stroke-dasharray:4 3,color:#334155
+
+    class OP,US,CO,RE,VE organizacion
+    class ZO,FR,RO,RT,VI cobertura
+    class EN,BU,DE,DI,HI,IT,PRU,REC envio
+    class RU,PA despacho
+    class SR,CR retiro
+    class LI,CD cierre
+    class EST,ESB,ESR enumeracion
+
+    style ORG fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px
+    style MIEM fill:#e0e7ff,stroke:#a5b4fc,stroke-width:1px
+    style COB fill:#fff7ed,stroke:#f59e0b,stroke-width:1.5px
+    style ENV fill:#eff6ff,stroke:#3b82f6,stroke-width:1.5px
+    style PARTES fill:#dbeafe,stroke:#93c5fd,stroke-width:1px
+    style ESTADOS fill:#f8fafc,stroke:#cbd5e1,stroke-width:1px
+    style EJ fill:#f8fafc,stroke:#94a3b8,stroke-width:1.5px
+    style DES fill:#ecfdf5,stroke:#10b981,stroke-width:1.5px
+    style RET fill:#faf5ff,stroke:#a855f7,stroke-width:1.5px
+    style CIE fill:#f0f9ff,stroke:#0ea5e9,stroke-width:1.5px
