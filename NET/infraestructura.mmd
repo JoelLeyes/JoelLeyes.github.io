@@ -1,0 +1,62 @@
+%%{init: {"theme":"base","fontFamily":"Segoe UI, Arial, sans-serif","themeCSS":"& { font-family: Segoe UI, Arial, sans-serif; }","look":"classic","themeVariables":{"fontSize":"18px","lineColor":"#64748b","primaryTextColor":"#172554","clusterBkg":"#f8fafc","clusterBorder":"#cbd5e1","edgeLabelBackground":"#ffffff"},"flowchart":{"htmlLabels":true,"curve":"basis","nodeSpacing":28,"rankSpacing":35,"wrappingWidth":360,"diagramPadding":24,"padding":18,"useMaxWidth":false}}}%%
+flowchart TB
+    subgraph CLIENTES["1 · CLIENTES Y PRUEBAS"]
+        usuarios("Usuarios web<br/>Operador · Comercio · Destinatario")
+        movil("Repartidores<br/>MAUI Android · SQLite offline")
+        k6("Grafana k6 · Docker<br/>Pruebas de carga por HTTPS")
+    end
+    dns("ClouDNS · DNS externo<br/>*.tallernet.cloud-ip.cc")
+    subgraph AWS["AWS · us-east-1 · VPC 172.31.0.0/16"]
+        alb("2 · Entrada segura · ALB + ACM<br/>HTTPS 443 · Certificado wildcard<br/>HTTP 80 redirige a HTTPS")
+        subgraph EKS["EKS 1.34 · 2 nodos t3.medium · namespace tallernet"]
+            nginx("NGINX Ingress · 2 replicas<br/>NodePort 32080 · Ruteo por dominio")
+            web("3 · Aplicaciones web · .NET 10<br/>Backoffice + API: Razor Pages / SignalR<br/>api.* / backoffice.*<br/>Portal Blazor: app.* / tracking.*")
+            hpa("HPA + metrics-server<br/>Backoffice: 2–4 pods · CPU 70 %<br/>Portal: 2 pods fijos")
+            redis[("Redis · 1 replica<br/>Cache · Claves Data Protection<br/>Backplane SignalR")]
+            rabbit[("4 · RabbitMQ · 1 instancia<br/>Eventos · Reintentos · Colas de fallidos<br/>Sin volumen persistente")]
+            worker("Queue Worker · 1 pod<br/>Avisos · Correo · Push · Historial<br/>Tareas programadas")
+            lgtm("OpenTelemetry → Grafana LGTM<br/>Logs: Loki · Trazas: Tempo<br/>Metricas: Prometheus · 1 pod")
+        end
+        rds[("Amazon RDS · PostgreSQL 16.9<br/>db.t3.micro · Single-AZ · 20 GiB<br/>Privado · SSL · Almacenamiento cifrado")]
+    end
+    subgraph EXTERNOS["5 · SERVICIOS EXTERNOS A AWS DEL LABORATORIO"]
+        atlas[("MongoDB Atlas<br/>Historial de eventos · TLS<br/>Indices · Retencion TTL")]
+        notificaciones("Firebase FCM / SMTP<br/>Push Android / Correo")
+        comercios("Sistemas de comercios<br/>Webhooks firmados con HMAC")
+    end
+    usuarios -->|HTTPS| alb
+    movil -->|HTTPS / JWT| alb
+    k6 -->|HTTPS| alb
+    dns -.->|CNAME| alb
+    alb -->|HTTP 32080| nginx
+    nginx -->|Services ClusterIP / HTTP 8080| web
+    hpa -.->|Escala Backoffice| web
+    web -->|SQL 5432| rds
+    web -->|TCP 6379| redis
+    web -->|Outbox / AMQP| rabbit
+    rabbit -->|Eventos / ack manual| worker
+    worker -->|SQL 5432| rds
+    worker -->|Escritura TLS| atlas
+    web -->|Backoffice: lectura TLS| atlas
+    worker --> notificaciones
+    worker -->|HTTP / HMAC| comercios
+    web -.->|OTLP| lgtm
+    worker -.->|OTLP| lgtm
+    classDef cliente fill:#eef2ff,stroke:#6366f1,color:#312e81,stroke-width:2px
+    classDef entrada fill:#fff7ed,stroke:#f59e0b,color:#7c2d12,stroke-width:2px
+    classDef aplicacion fill:#eff6ff,stroke:#3b82f6,color:#172554,stroke-width:2px
+    classDef datos fill:#ecfdf5,stroke:#10b981,color:#064e3b,stroke-width:2px
+    classDef externo fill:#faf5ff,stroke:#a855f7,color:#581c87,stroke-width:2px
+    classDef observabilidad fill:#fefce8,stroke:#eab308,color:#713f12,stroke-width:2px
+    classDef control fill:#f0f9ff,stroke:#0ea5e9,color:#0c4a6e,stroke-width:2px
+    class usuarios,movil cliente
+    class dns,alb,nginx entrada
+    class web,worker aplicacion
+    class redis,rabbit,rds datos
+    class k6,atlas,notificaciones,comercios externo
+    class lgtm observabilidad
+    class hpa control
+    style CLIENTES fill:#f8fafc,stroke:#cbd5e1
+    style AWS fill:#fffbeb,stroke:#f59e0b,stroke-width:2px
+    style EKS fill:#f8fafc,stroke:#60a5fa,stroke-width:2px
+    style EXTERNOS fill:#faf5ff,stroke:#c084fc
